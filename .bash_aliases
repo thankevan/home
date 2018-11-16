@@ -60,3 +60,11 @@ else
   alias start=nautilus
 fi
 
+
+########################
+#  FUNCTION OVERRIDES  #
+########################
+
+alias gc="getcolumn"
+alias ac="addcolumn"
+
