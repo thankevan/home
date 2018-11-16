@@ -1,0 +1,43 @@
+
+# HELP
+
+# Copy all to file?: "C-A [ g SPACE G $ >"
+
+# STATUS LINE EXPLANATION
+
+# %{= bw}  Change to white on blue. (Comes from $ENV_SCREEN_COLOR in .bashrc.)
+# %-Lw     Print windows to the left of the current one. (L to also print window flags.)
+# %{= KW}  Change to bright white on bright black.
+# %50>     Do truncation before here if needed (at 50% point - attempt centering).
+# %n       Print current window number.
+# %f       Print current window flags.
+# *        Print *.
+# %t       Print current window title.
+# %{= bw}  Change to white on blue. (Comes from $ENV_SCREEN_COLOR in .bashrc.)
+# %+Lw     Print windows to the right of the current one. (L to also print window flags.)
+# %<       Do truncation after here if needed.
+
+# From $SCREENTIME in .bashrc because of cygwin quirks
+# %{= kG}  Change to bright green on black.
+# %=       Pad rest of content to the right. (This needs to be before the color for cygwin.)
+# %D       Print day.
+# %m/%d/%y Print month/date/year.
+# %C       Print 12h time.
+# %a       Print am/pm.
+
+
+startup_message off
+vbell_msg string 'Bell in window %n'
+defscrollback 100000
+bind ' ' windowlist -b
+
+# | split vertical
+bind '\' split
+bind '_' resize max
+bind '=' resize =
+bind '+' resize +3
+bind '-' resize -3
+
+# Change from hardstatus to caption so that it is duplicated in each screen split.
+caption always '%{= '$ENV_SCREEN_COLOR'}%-Lw%{= KW}%50>%n%f* %t%{= '$ENV_SCREEN_COLOR'}%+Lw%<'$SCREENTIME
+
