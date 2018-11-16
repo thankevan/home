@@ -2,12 +2,30 @@
 # If not running interactively, don't do anything
 [[ "$-" != *i* ]] && return
 
+#########################################
+#  SOURCE LOCAL INITIAL CUSTOMIZATIONS  #
+#########################################
+
+# This will setup variables that are used in this file.
+
+###### .PRECUSTOM BASHRC OPTIONS ######
+# export QUITNOW=1      - Signifies for bashrc to stop processing.
+
+if [ -f "${HOME}/.bash_precustom" ]; then
+  source "${HOME}/.bash_precustom"
+
+  # Don't include any other customizations.
+  if [ "$QUITNOW" == "1" ]; then
+      return
+  fi
+fi
+
 
 ##########################
 #  SOURCE GLOBAL BASHRC  #
 ##########################
 
-# Source global definitions
+# Source global definitions.
 if [ -f /etc/bashrc ]; then
   . /etc/bashrc
 fi
@@ -18,6 +36,32 @@ fi
 ################
 
 export EDITOR="vim"
+
+
+###############
+#  OS CHECKS  #
+###############
+
+# The default is assumed to be Ubuntu.
+# But, in reality, I fix issues as I notice them.
+
+if [ "FreeBSD" = `uname` ]; then
+  export ISBSD=1
+else
+  export ISBSD=0
+fi
+
+if [ "Darwin" = `uname` ]; then
+  export ISMAC=1
+else
+  export ISMAC=0
+fi
+
+if [[ `uname` == CYGWIN* ]]; then
+  export ISCYG=1
+else
+  export ISCYG=0
+fi
 
 
 #############
@@ -83,4 +127,15 @@ fi
 ############
 
 export PS1="\D{%I:%M%P}:$USER@\h> "
+
+
+#################################
+#  SOURCE LOCAL CUSTOMIZATIONS  #
+#################################
+
+if [ -f "${HOME}/.bash_custom" ]; then
+  # This is where I'll set my timezone (This way the timezone can be set based on the server location.)
+  # export TZ='America/New_York';
+  source "${HOME}/.bash_custom"
+fi
 
