@@ -9,6 +9,9 @@
 
 # This will setup variables that are used in this file.
 
+###### .PRECUSTOM OPTIONS ######
+# export CODE_ENV=DEV|TEST|PROD  - Manually sets the environment.
+
 ###### .PRECUSTOM BASHRC OPTIONS ######
 # export QUITNOW=1      - Signifies for bashrc to stop processing.
 
@@ -154,6 +157,40 @@ export C_ECHO_BOLD_CYAN=`echo -e '\033[1;36m'`
 export C_ECHO_BOLD_WHITE=`echo -e '\033[1;37m'`
 
 
+###############################
+#  CODE ENVIRONMENT COLORING  #
+###############################
+
+# This sets coloring so you are reminded what environment you are in.
+# Environments are: DEV, TEST, PROD
+# Coloring:
+#   DEV  blue
+#   TEST yellow
+#   PROD red
+
+case "$CODE_ENV" in
+  "DEV" | "TEST" | "PROD" )
+    ;;
+  "")
+    echo '$CODE_ENV is empty, setting to PROD'
+    export CODE_ENV=PROD
+    ;;
+  *)
+    echo '$CODE_ENV is typoed, resetting to PROD'
+    export CODE_ENV=PROD
+    ;;
+esac
+
+# Default to prod, set explicitely in .bash_precustom
+if [ $CODE_ENV == 'DEV' ]; then
+  export ENV_PS_COLOR=$C_ECHO_BOLD_BLUE
+elif [ $CODE_ENV == 'TEST' ]; then
+  export ENV_PS_COLOR=$C_ECHO_YELLOW
+else
+  export ENV_PS_COLOR=$C_ECHO_RED
+fi
+
+
 #####################
 #  BASH COMPLETION  #
 #####################
@@ -180,10 +217,11 @@ fi
 #  PROMPT  #
 ############
 
-# Yellow: Time
-# Grey:   User Name
-# Green:  @Machine Name
-export PS1="$C_BOLD_YELLOW\D{%I:%M%P}$C_RESET:$USER$C_BOLD_GREEN@\h$C_RESET> "
+# Yellow:       Time
+# ENV_PS_COLOR: User Name
+# Green:        @Machine Name
+# ENV_PS_COLOR: >
+export PS1="$C_BOLD_YELLOW\D{%I:%M%P}$C_RESET:$ENV_PS_COLOR$USER$C_RESET$C_BOLD_GREEN@\h$C_RESET$ENV_PS_COLOR>$C_RESET "
 
 
 #################################
