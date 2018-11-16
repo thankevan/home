@@ -1,6 +1,7 @@
 
-# If not running interactively, don't do anything
+# If not running interactively, don't do anything.
 [[ "$-" != *i* ]] && return
+
 
 #########################################
 #  SOURCE LOCAL INITIAL CUSTOMIZATIONS  #
@@ -100,6 +101,59 @@ shopt -s checkwinsize
 export PATH=$PATH:$HOME/bin:$HOME/scripts
 
 
+############
+#  COLORS  #
+############
+
+# Add easy to use color variables.
+
+if [ -x /usr/bin/dircolors ]; then
+  eval "`dircolors -b`"
+fi
+
+# In general, use these.
+export C_RESET="\[\033[0m\]"
+
+export C_BLACK="\[\033[0;30m\]"
+export C_RED="\[\033[0;31m\]"
+export C_GREEN="\[\033[0;32m\]"
+export C_YELLOW="\[\033[0;33m\]"
+export C_BLUE="\[\033[0;34m\]"
+export C_MAGENTA="\[\033[0;35m\]"
+export C_CYAN="\[\033[0;36m\]"
+export C_WHITE="\[\033[0;37m\]"
+
+export C_BOLD_BLACK="\[\033[1;30m\]"
+export C_BOLD_RED="\[\033[1;31m\]"
+export C_BOLD_GREEN="\[\033[1;32m\]"
+export C_BOLD_YELLOW="\[\033[1;33m\]"
+export C_BOLD_BLUE="\[\033[1;34m\]"
+export C_BOLD_MAGENTA="\[\033[1;35m\]"
+export C_BOLD_CYAN="\[\033[1;36m\]"
+export C_BOLD_WHITE="\[\033[1;37m\]"
+
+# use these inside of echo
+export C_ECHO_RESET=`echo -e '\033[00m'`
+
+export C_ECHO_BLACK=`echo -e '\033[30m'`
+export C_ECHO_RED=`echo -e '\033[31m'`
+export C_ECHO_GREEN=`echo -e '\033[32m'`
+export C_ECHO_YELLOW=`echo -e '\033[33m'`
+export C_ECHO_BLUE=`echo -e '\033[34m'`
+export C_ECHO_MAGENTA=`echo -e '\033[35m'`
+export C_ECHO_CYAN=`echo -e '\033[36m'`
+export C_ECHO_WHITE=`echo -e '\033[37m'`
+
+export C_ECHO_BOLD_BLACK=`echo -e '\033[1;30m'`
+export C_ECHO_BOLD_RED=`echo -e '\033[1;31m'`
+export C_ECHO_BOLD_GREEN=`echo -e '\033[1;32m'`
+export C_ECHO_BOLD_YELLOW=`echo -e '\033[1;33m'`
+export C_ECHO_BOLD_BLUE=`echo -e '\033[1;34m'`
+export C_ECHO_BOLD_MAGENTA=`echo -e '\033[1;35m'`
+export C_ECHO_BOLD_CYAN=`echo -e '\033[1;36m'`
+export C_ECHO_BOLD_WHITE=`echo -e '\033[1;37m'`
+
+
 #####################
 #  BASH COMPLETION  #
 #####################
@@ -126,7 +180,10 @@ fi
 #  PROMPT  #
 ############
 
-export PS1="\D{%I:%M%P}:$USER@\h> "
+# Yellow: Time
+# Grey:   User Name
+# Green:  @Machine Name
+export PS1="$C_BOLD_YELLOW\D{%I:%M%P}$C_RESET:$USER$C_BOLD_GREEN@\h$C_RESET> "
 
 
 #################################
