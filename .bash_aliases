@@ -33,6 +33,7 @@ alias lS="ls -alSh $lscolor"
 #  SEARCHING  #
 ###############
 
+alias ff="$HOME/bin/find_file.sh"
 alias fh="history | grep --color='auto'"
 
 alias grep="grep --color='auto'"
