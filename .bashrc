@@ -12,6 +12,10 @@
 ###### .PRECUSTOM OPTIONS ######
 # export CODE_ENV=DEV|TEST|PROD  - Manually sets the environment.
 
+###### .PRECUSTOM SCREEN OPTIONS ######
+# export NOSCREEN=1     - Prevents screen.
+# export SYSSCREENRC=x  - Overrides .screenrc with x.
+
 ###### .PRECUSTOM BASHRC OPTIONS ######
 # export QUITNOW=1      - Signifies for bashrc to stop processing.
 
@@ -183,11 +187,45 @@ esac
 
 # Default to prod, set explicitely in .bash_precustom
 if [ $CODE_ENV == 'DEV' ]; then
+  export ENV_SCREEN_COLOR='bw'
   export ENV_PS_COLOR=$C_ECHO_BOLD_BLUE
 elif [ $CODE_ENV == 'TEST' ]; then
+  export ENV_SCREEN_COLOR='yb'
   export ENV_PS_COLOR=$C_ECHO_YELLOW
 else
+  export ENV_SCREEN_COLOR='rw'
   export ENV_PS_COLOR=$C_ECHO_RED
+fi
+
+
+############
+#  SCREEN  #
+############
+
+# Do some checks to see if screen should not be used.
+# NOSCREEN can also be set to 1 previous to this if you want to force not using screen.
+
+if [ "$TERM" == 'screen' ]; then
+  export NOSCREEN=1
+fi
+
+if [ "$USER" == 'root' ] && [ `logname` != 'root' ]; then
+  export NOSCREEN=1
+fi
+
+if [ ! -f "${HOME}/.screenrc" ]; then
+  export NOSCREEN=1
+fi
+
+if [ $ISCYG = 1 ]; then
+  export SCREENTIME='%=%{= kG} %D %m/%d/%y %C%a'
+else
+  export SCREENTIME=' %{= kG}%=%D %m/%d/%y %C%a'
+fi
+
+# Reattach to screen if there is one available
+if [ "$NOSCREEN" != 1 ]; then
+  screen -RR
 fi
 
 
