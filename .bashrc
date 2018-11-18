@@ -262,11 +262,7 @@ fi
 #  PROMPT  #
 ############
 
-# Yellow:       Time
-# ENV_PS_COLOR: User Name
-# Green:        @Machine Name
-# ENV_PS_COLOR: >
-export PS1="$C_BOLD_YELLOW\D{%I:%M%P}$C_RESET:$ENV_PS_COLOR$USER$C_RESET$C_BOLD_GREEN@\h$C_RESET$ENV_PS_COLOR>$C_RESET "
+export PS1=`ps1_myprompt`
 
 
 #################################
