@@ -262,6 +262,7 @@ fi
 #  PROMPT  #
 ############
 
+# ps1_myprompt is a function in .bash_functions
 export PS1=`ps1_myprompt`
 
 
