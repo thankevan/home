@@ -1,4 +1,4 @@
-thankevan-home
+home
 ==============
 
 My linux environment
