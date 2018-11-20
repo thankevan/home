@@ -81,9 +81,9 @@ set smartindent
 set cindent
 
 " Set my tabstops.
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
+autocmd BufRead,BufNew * set tabstop=2
+autocmd BufRead,BufNew * set softtabstop=2
+autocmd BufRead,BufNew * set shiftwidth=2
 
 " Convert tabs to spaces.
 set expandtab
