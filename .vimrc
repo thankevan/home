@@ -121,6 +121,26 @@ set winminheight=0
 inoremap <C-w> <ESC><C-w>
 
 
+""""""""""""""""""""
+"  TAB COMPLETION  "
+""""""""""""""""""""
+
+" Fix coloring.
+hi PmenuSel ctermfg=7 ctermbg=4
+hi PmenuSbar ctermfg=Gray ctermbg=Blue
+hi PmenuThumb cterm=reverse
+
+" Set the preview window to 3 lines high.
+set previewheight=3
+
+" Insert only the longest match, open the menu even if there is only one match, show preview window.
+set completeopt=longest,menuone,preview
+
+" Make enter behave the same regardless of the complete menu state.
+"http://vim.wikia.com/wiki/Make_Vim_completion_popup_menu_work_just_like_in_an_IDE
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+
 """"""""""""""""""
 "  STATUS LINES  "
 """"""""""""""""""
