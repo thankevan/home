@@ -6,6 +6,9 @@ if ! [ "$branch" = "master" ]; then
   git checkout master
 fi
 
+git pull
+
+echo ""
 echo "Going to delete:"
 git branch --merged | grep -v master
 read foo

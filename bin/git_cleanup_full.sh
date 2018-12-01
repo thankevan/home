@@ -6,7 +6,7 @@ if ! [ "$branch" = "master" ]; then
   git checkout master
 fi
 
-git_local_cleanup.sh
+git_cleanup_local.sh
 
 git fetch -p
 
