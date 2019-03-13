@@ -239,9 +239,22 @@ export TERM=xterm
 #####################
 #  BASH COMPLETION  #
 #####################
-
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
+fi
+
+if [ $ISMAC = 1 ]; then
+  # brew install bash-completion
+  if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
+    . "/usr/local/etc/profile.d/bash_completion.sh"
+  else
+    echo "You may need to: brew install bash-completion"
+  fi
+fi
+
+# Git completion from: https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
+if [ -f "${HOME}/.git-completion.bash" ]; then
+  source "${HOME}/.git-completion.bash"
 fi
 
 
