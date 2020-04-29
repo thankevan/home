@@ -53,24 +53,26 @@ export EDITOR="vim"
 # The default is assumed to be Ubuntu.
 # But, in reality, I fix issues as I notice them.
 
+export ISBSD=0
+export ISMAC=0
+export ISCYG=0
+export ISWSL=0
+
 if [ "FreeBSD" = `uname` ]; then
   export ISBSD=1
-else
-  export ISBSD=0
 fi
 
 if [ "Darwin" = `uname` ]; then
   export ISMAC=1
-else
-  export ISMAC=0
 fi
 
 if [[ `uname` == CYGWIN* ]]; then
   export ISCYG=1
-else
-  export ISCYG=0
 fi
 
+if [[ $(uname -r) = *Microsoft ]]; then
+	export ISWSL=1
+fi
 
 #############
 #  HISTORY  #
