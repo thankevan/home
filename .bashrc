@@ -70,7 +70,7 @@ if [[ `uname` == CYGWIN* ]]; then
   export ISCYG=1
 fi
 
-if [[ $(uname -r) = *Microsoft ]]; then
+if [[ $(uname -r) = *icrosoft* ]]; then
 	export ISWSL=1
 fi
 

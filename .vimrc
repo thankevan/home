@@ -85,7 +85,7 @@ autocmd BufRead,BufNew * set tabstop=2
 autocmd BufRead,BufNew * set softtabstop=2
 autocmd BufRead,BufNew * set shiftwidth=2
 
-" Convert tabs to spaces.
+" Convert tabs to spaces. (:retab to do this manually)
 set expandtab
 
 " Map tab to shift left and right, deselect if not selected, reselect if selected.
