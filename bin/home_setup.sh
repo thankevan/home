@@ -3,11 +3,27 @@
 BASH_BACKUP_DIR="bash_bak"
 EMAIL=""
 
-IS_WSL=0
+ISBSD=0
+ISMAC=0
+ISCYG=0
+ISWSL=0
+
+if [ "FreeBSD" = `uname` ]; then
+  ISBSD=1
+fi
+
+if [ "Darwin" = `uname` ]; then
+  ISMAC=1
+fi
+
+if [[ `uname` == CYGWIN* ]]; then
+  ISCYG=1
+fi
 
 if [[ $(uname -r) = *icrosoft* ]]; then
-  IS_WSL=1
+	ISWSL=1
 fi
+
 
 function check_if_home_directory {
   echo ""
@@ -18,6 +34,8 @@ function check_if_home_directory {
     echo "You must run this from your home directory."
     exit 1
   fi
+
+  echo "Verified"
 }
 
 
@@ -32,8 +50,9 @@ function setup_ssh_key {
   fi
 
   read -p 'Email address for ssh-key tag: ' EMAIL
-  if [ "$EMAIL" -eq "" ]; then
-    exit 1 "Error: email address cannot be blank"
+  if [ "$EMAIL" == "" ]; then
+    echo "ERROR: email address cannot be blank"
+    exit 1
   fi
   echo "Email: $EMAIL"
   ssh-keygen -t rsa -b 4096 -C "$EMAIL"
@@ -49,10 +68,18 @@ function instruct_ssh_key_to_github {
     return 0
   fi
 
-  if [ $IS_WSL == 1 ]; then
-    powershell.exe /c start "https://github.com/settings/keys"
+  GITHUB_SETTINGS_URL="https://github.com/settings/keys"
+
+  if [ $ISWSL == 1 ]; then
+    powershell.exe /c start "$GITHUB_SETTINGS_URL"
     cat ~/.ssh/id_rsa.pub | clip.exe
   fi
+
+  if [ $ISCYG == 1 ]; then
+    cygstart "$GITHUB_SETTINGS_URL"
+    cat ~/.ssh/id_rsa.pub > /dev/clipboard
+  fi
+
   read -p "ssh key copied to clipboard, add to github, then hit enter"
 }
 
@@ -74,16 +101,28 @@ function backup_bash_files {
   if [ -d "$BASH_BACKUP_DIR" ]; then
     echo "Verified $BASH_BACKUP_DIR exists"
   else
-    echo "Error: could not create directory $BASH_BACKUP_DIR"
+    echo "ERROR: could not create directory $BASH_BACKUP_DIR"
     exit 1
   fi
 
-  # copy old files to backup
-  cp .bashrc $BASH_BACKUP_DIR/
-  cp .profile $BASH_BACKUP_DIR/
+  for file in \
+    .profile \
+    .bashrc \
+    .bash_profile \
+    .bash_logout \
+    .inputrc \
+    .noop; do
+
+    if [ -f "$file" ]; then
+      echo "Copying $file to $BASH_BACKUP_DIR (no clobber)"
+      cp --no-clobber "$file" "$BASH_BACKUP_DIR/"
+      exit 1
+    fi
+
+  done
 
   if [ ! -f "$BASH_BACKUP_DIR/.profile" ]; then
-    echo "Error: $BASH_BACKUP_DIR/.profile not found, backup existing files"
+    echo "ERROR: $BASH_BACKUP_DIR/.profile not found, backup existing files"
     exit 1
   fi
 }
@@ -156,13 +195,21 @@ function setup_git_global_configs {
   # git config --global branch.autoSetupRebase always
 }
 
-check_if_home_directory
-setup_ssh_key
-instruct_ssh_key_to_github
-backup_bash_files
-clone_home
-setup_custom_dot_files
-setup_git_global_configs
+function run_all {
+  check_if_home_directory
+  setup_ssh_key
+  instruct_ssh_key_to_github
+  backup_bash_files
+  clone_home
+  setup_custom_dot_files
+  setup_git_global_configs
+}
 
+to_run="$@"
+if [ "$to_run" == "" ]; then
+  to_run="run_all"
+fi
+
+$to_run
 echo "DONE"
 
