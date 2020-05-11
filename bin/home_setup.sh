@@ -21,7 +21,7 @@ if [[ `uname` == CYGWIN* ]]; then
 fi
 
 if [[ $(uname -r) = *icrosoft* ]]; then
-	ISWSL=1
+  ISWSL=1
 fi
 
 
@@ -88,11 +88,6 @@ function backup_bash_files {
   echo "BACKUP BASH FILES"
   echo "-----------------"
 
-  if [ -d "$BASH_BACKUP_DIR" ]; then
-    echo "Home files backup directory exists - skipping backup of dot files"
-    return 0
-  fi
-
   if [ ! -d "$BASH_BACKUP_DIR" ]; then
     echo "Creating $BASH_BACKUP_DIR"
     mkdir "$BASH_BACKUP_DIR"
@@ -116,7 +111,6 @@ function backup_bash_files {
     if [ -f "$file" ]; then
       echo "Copying $file to $BASH_BACKUP_DIR (no clobber)"
       cp --no-clobber "$file" "$BASH_BACKUP_DIR/"
-      exit 1
     fi
 
   done
