@@ -80,6 +80,11 @@ function instruct_ssh_key_to_github {
     cat ~/.ssh/id_rsa.pub > /dev/clipboard
   fi
 
+  if [ $ISMAC == 1 ]; then
+    open "$GITHUB_SETTINGS_URL"
+    pbcopy < ~/.ssh/id_rsa.pub
+  fi
+
   read -p "ssh key copied to clipboard, add to github, then hit enter"
 }
 
@@ -110,7 +115,11 @@ function backup_bash_files {
 
     if [ -f "$file" ]; then
       echo "Copying $file to $BASH_BACKUP_DIR (no clobber)"
-      cp --no-clobber "$file" "$BASH_BACKUP_DIR/"
+      if [[ $ISMAC = 1 ]]; then
+        cp -n "$file" "$BASH_BACKUP_DIR/"
+      else
+        cp --no-clobber "$file" "$BASH_BACKUP_DIR/"
+      fi
     fi
 
   done
@@ -189,8 +198,62 @@ function setup_git_global_configs {
   # git config --global branch.autoSetupRebase always
 }
 
+function mac_setup {
+  echo ""
+  echo "DO MAC SETUP"
+  echo "------------"
+
+  mac_install_homebrew
+  mac_install_commands_via_brew
+  mac_default_to_bash
+}
+
+function mac_install_homebrew {
+  echo ""
+  echo "MAC INSTALL HOMEBREW"
+  echo "--------------------"
+
+  if [[ "$(command -v brew)" != "" ]]; then
+    echo "homebrew already installed"
+    return 0
+  fi
+
+  echo "Installing brew... see: https://brew.sh/"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+}
+
+function mac_install_commands_via_brew {
+  echo ""
+  echo "MAC INSTALL COMMANDS VIA BREW"
+  echo "-----------------------------"
+
+  if [[ "$(command -v brew)" = "" ]]; then
+    echo "brew not installed"
+    exit 1
+  fi
+
+  for cmd in \
+    bash \
+    wget; do
+
+    brew install $cmd
+
+  done
+}
+
+function mac_default_to_bash {
+  echo ""
+  echo "MAC DEFAULT TO BASH"
+  echo "-------------------"
+
+  chsh -s /bin/bash
+}
+
 function run_all {
   check_if_home_directory
+  if [[ $ISMAC == 1 ]]; then
+    mac_setup
+  fi
   setup_ssh_key
   instruct_ssh_key_to_github
   backup_bash_files
