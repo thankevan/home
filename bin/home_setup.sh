@@ -172,6 +172,10 @@ function setup_custom_dot_files {
   if [ "$SKIP_SCREEN" = "1" ]; then
     echo "export NOSCREEN=$SKIP_SCREEN" >> .bash_precustom
   fi
+
+  if [ $ISMAC = 1 ]; then
+    echo "export BASH_SILENCE_DEPRECATION_WARNING=1" >> .bash_precustom
+  fi
 }
 
 function setup_git_global_configs {
@@ -233,7 +237,6 @@ function mac_install_commands_via_brew {
   fi
 
   for cmd in \
-    bash \
     wget; do
 
     brew install $cmd
