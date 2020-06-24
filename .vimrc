@@ -72,9 +72,9 @@ nnoremap * *zz
 nnoremap # #zz
 
 
-""""""""""""""""""""""""""
-"  TABS AND INDENTATION  "
-""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""
+"  TABS, WHITESPACE, AND INDENTATION  "
+"""""""""""""""""""""""""""""""""""""""
 " Turn on indenting.
 set autoindent
 set smartindent
@@ -107,6 +107,8 @@ set nofoldenable
 set foldcolumn=0
 autocmd BufLeave * if (&fen == 0) | set foldcolumn=0 | endif
 
+" Set how whitespace and other chars are displayed when you use `set list!`
+set listchars=eol:¬,tab:>_,trail:~,extends:>,precedes:<,space:·
 
 """"""""""""""""""""""
 "  WINDOW SPLITTING  "
