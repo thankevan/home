@@ -166,7 +166,8 @@ function setup_custom_dot_files {
   read -p 'Pick environment (DEV|TEST|PROD): ' ENV_LEVEL
   read -p 'Skip screen? (1): ' SKIP_SCREEN
 
-  touch .bash_precustom .bash_custom
+  echo "#!/bin/bash" >> .bash_precustom
+  echo "#!/bin/bash" >> .bash_custom
 
   echo "export CODE_ENV=$ENV_LEVEL" >> .bash_precustom
   if [ "$SKIP_SCREEN" = "1" ]; then
