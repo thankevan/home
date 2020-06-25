@@ -110,6 +110,10 @@ autocmd BufLeave * if (&fen == 0) | set foldcolumn=0 | endif
 " Set how whitespace and other chars are displayed when you use `set list!`
 set listchars=eol:¬,tab:>_,trail:~,extends:>,precedes:<,space:·
 
+" Highlight trailing whitespace in red
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+
 """"""""""""""""""""""
 "  WINDOW SPLITTING  "
 """"""""""""""""""""""
