@@ -13,5 +13,8 @@ _bash_function_completion()
   COMPREPLY=($(compgen -W "$function_names" -- "${COMP_WORDS[1]}"))
 }
 
+# To make files autocomplete, put a line like this somewhere it will be sourced (and source this file after)
+# export BASH_FUNCTION_COMPLETION_FILES+=("filename.sh")
+
 complete -F _bash_function_completion -o default "${BASH_FUNCTION_COMPLETION_FILES[@]}"
 
