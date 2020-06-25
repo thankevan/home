@@ -259,6 +259,7 @@ if [ -f "${HOME}/.git-completion.bash" ]; then
   source "${HOME}/.git-completion.bash"
 fi
 
+export BASH_FUNCTION_COMPLETION_FILES+=("home_setup.sh")
 
 #########################
 #  SOURCE MY DOT FILES  #
@@ -290,4 +291,12 @@ if [ -f "${HOME}/.bash_custom" ]; then
   # export TZ='America/New_York';
   source "${HOME}/.bash_custom"
 fi
+
+###### .BASH_CUSTOM OPTIONS ######
+# export BASH_FUNCTION_COMPLETION_FILES+=("filename.sh")  - autocomplete functions within filename.sh
+
+if [ -f "${HOME}/bin/bash_function_completion.sh" ]; then
+  source "${HOME}/bin/bash_function_completion.sh"
+fi
+
 
