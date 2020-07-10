@@ -238,6 +238,8 @@ function mac_install_commands_via_brew {
   fi
 
   for cmd in \
+    gnu-sed \
+    grep \
     wget; do
 
     brew install $cmd

@@ -259,7 +259,11 @@ if [ -f "${HOME}/.git-completion.bash" ]; then
   source "${HOME}/.git-completion.bash"
 fi
 
-export BASH_FUNCTION_COMPLETION_FILES+=("home_setup.sh")
+if [ "$BASH_FUNCTION_COMPLETION_FILES" == "" ]; then
+  export BASH_FUNCTION_COMPLETION_FILES=()
+fi
+BASH_FUNCTION_COMPLETION_FILES+=("home_setup.sh")
+export BASH_FUNCTION_COMPLETION_FILES
 
 #########################
 #  SOURCE MY DOT FILES  #
@@ -294,6 +298,9 @@ fi
 
 ###### .BASH_CUSTOM OPTIONS ######
 # export BASH_FUNCTION_COMPLETION_FILES+=("filename.sh")  - autocomplete functions within filename.sh
+#    The above SHOULD be ok but mac bash sometimes has issues. In that case update the array and the export the variable in the next line like:
+#    BASH_FUNCTION_COMPLETION_FILES+=("filename.sh")
+#    export BASH_FUNCTION_COMPLETION_FILES
 
 if [ -f "${HOME}/bin/bash_function_completion.sh" ]; then
   source "${HOME}/bin/bash_function_completion.sh"
