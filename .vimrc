@@ -18,12 +18,12 @@ set backspace=indent,eol,start
 """""""""""""""""""""""""""""
 
 " Turn file type detection on, as well as for indentation and plugins.
-filetype plugin indent on 
+filetype plugin indent on
 
 " Set filetypes for my dot files.
-autocmd BufRead,BufNew .bash*    set filetype=sh
-autocmd BufRead,BufNew .screenrc set filetype=sh
-autocmd BufRead,BufNew .inputrc  set filetype=sh
+autocmd BufRead,BufNew,BufNewFile .bash*    set filetype=sh
+autocmd BufRead,BufNew,BufNewFile .screenrc set filetype=sh
+autocmd BufRead,BufNew,BufNewFile .inputrc  set filetype=sh
 
 """"""""""""""""
 " LINE OPTIONS "
@@ -81,9 +81,9 @@ set smartindent
 set cindent
 
 " Set my tabstops.
-autocmd BufRead,BufNew * set tabstop=2
-autocmd BufRead,BufNew * set softtabstop=2
-autocmd BufRead,BufNew * set shiftwidth=2
+autocmd BufRead,BufNew,BufNewFile * set tabstop=2
+autocmd BufRead,BufNew,BufNewFile * set softtabstop=2
+autocmd BufRead,BufNew,BufNewFile * set shiftwidth=2
 
 " Convert tabs to spaces. (:retab to do this manually)
 set expandtab
@@ -163,23 +163,23 @@ function! SetupStatusLine()
   hi User1 ctermbg=red ctermfg=white
   hi User2 ctermbg=grey ctermfg=black
   hi User3 ctermbg=black ctermfg=darkyellow
-  
+
   " Here's a breakdown.
-  " Some general info: 
+  " Some general info:
   "   %#*           Means set the highlighting to the User# highlight colors.
   "   %xxx(yyy%)    This is a grouping for setting alignment/width (xxx) of (yyy) inside the grouping.
   "   %-#.@         This is for formatting, - is left align, # is min width, @ is max width but optional.
   "
   " [%2*]                             Set highlighting to User2 (black on grey).
   " [%<]                              Truncate here if the line is too long.
-  " [%F\ ]                            Full path to file in the buffer. 
+  " [%F\ ]                            Full path to file in the buffer.
   " [%=]                              Separation point between left and right aligned items.
   " [%-5.(%)\ ]                       Empty group at least 5 wide followed by a space.
   " [%-8.(%2*%y%)\ ]                  Display filetype (%y) in User2 highlighting (black on grey).
-  " [%-10.(%1*%m%*%2*%r%w%h%)\ ]      Display modified (in red), readonly, preview, and help flags. 
+  " [%-10.(%1*%m%*%2*%r%w%h%)\ ]      Display modified (in red), readonly, preview, and help flags.
   " [%-8.(%2*%l,%v%)\ ]               Display line number, virtual column number.
   " [%2*]                             Set highlighting back to User2.
-  " [%P]                              Display percentage of way through file. 
+  " [%P]                              Display percentage of way through file.
 
   set statusline=%2*%<%F\ %=%-5.(%)\ %-8.(%2*%y%)\ %-10.(%1*%m%*%2*%r%w%h%)\ %-8.(%2*%l,%v%)\ %2*%P
 endfunction
