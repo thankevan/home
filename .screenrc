@@ -17,9 +17,8 @@
 # %+Lw     Print windows to the right of the current one. (L to also print window flags.)
 # %<       Do truncation after here if needed.
 
-# From $SCREENTIME in .bashrc because of cygwin quirks
+# %=       Pad rest of content to the right.
 # %{= kG}  Change to bright green on black.
-# %=       Pad rest of content to the right. (This needs to be before the color for cygwin.)
 # %D       Print day.
 # %m/%d/%y Print month/date/year.
 # %C       Print 12h time.
@@ -39,5 +38,5 @@ bind '+' resize +3
 bind '-' resize -3
 
 # Change from hardstatus to caption so that it is duplicated in each screen split.
-caption always '%{= '$ENV_SCREEN_COLOR'}%-Lw%{= KW}%50>%n%f* %t%{= '$ENV_SCREEN_COLOR'}%+Lw%<'$SCREENTIME
+caption always '%{= '$ENV_SCREEN_COLOR'}%-Lw%{= KW}%50>%n%f* %t%{= '$ENV_SCREEN_COLOR'}%+Lw%<%{= '$ENV_SCREEN_COLOR'}%=%{= kG}%D %m/%d/%y %C%a'
 

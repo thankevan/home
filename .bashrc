@@ -207,7 +207,8 @@ fi
 # Do some checks to see if screen should not be used.
 # NOSCREEN can also be set to 1 previous to this if you want to force not using screen.
 
-if [ "$TERM" == 'screen' ]; then
+# am I already in screen?
+if [ "$STY" != "" ]; then
   export NOSCREEN=1
 fi
 
@@ -217,12 +218,6 @@ fi
 
 if [ ! -f "${HOME}/.screenrc" ]; then
   export NOSCREEN=1
-fi
-
-if [ $ISCYG = 1 ]; then
-  export SCREENTIME='%=%{= kG} %D %m/%d/%y %C%a'
-else
-  export SCREENTIME=' %{= kG}%=%D %m/%d/%y %C%a'
 fi
 
 # Reattach to screen if there is one available
