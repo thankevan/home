@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # prevent commiting directly to master
 # link as pre-commit in .git/hooks or add executing this in that file
