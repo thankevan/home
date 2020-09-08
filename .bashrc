@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # If not running interactively, don't do anything.
 [[ "$-" != *i* ]] && return
@@ -71,7 +72,7 @@ if [[ `uname` == CYGWIN* ]]; then
 fi
 
 if [[ $(uname -r) = *icrosoft* ]]; then
-	export ISWSL=1
+  export ISWSL=1
 fi
 
 #############

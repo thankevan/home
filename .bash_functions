@@ -1,3 +1,4 @@
+#!/bin/bash
 
 #############################
 #  COLORS (SET IN .bashrc)  #
