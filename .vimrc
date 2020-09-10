@@ -71,6 +71,12 @@ nnoremap n nzz
 nnoremap * *zz
 nnoremap # #zz
 
+" search and move to ~top of screen
+"nnoremap N Nzt
+"nnoremap n nzt
+"nnoremap * *zt
+"nnoremap # #zt
+
 
 """""""""""""""""""""""""""""""""""""""
 "  TABS, WHITESPACE, AND INDENTATION  "
