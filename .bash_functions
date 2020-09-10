@@ -91,7 +91,7 @@ function ps1_myprompt() {
 }
 
 function ps1_getwrap() {
-  if [[ $USER == root ]]; then
+  if [ "$USER" == "root" ]; then
     echo "@@@@@@@@@@"
   else
     echo "==="
@@ -99,7 +99,7 @@ function ps1_getwrap() {
 }
 
 function ps1_getuser() {
-  if [[ $USER == root ]]; then
+  if [ "$USER" == "root" ]; then
     echo "$C_ECHO_BOLD_RED$USER$C_RESET"
   else
     echo "$C_ECHO_GREEN$USER$C_RESET"
@@ -107,7 +107,7 @@ function ps1_getuser() {
 }
 
 function ps1_getpromptchar() {
-  if [[ $USER == root ]]; then
+  if [ "$USER" == "root" ]; then
     echo "$C_ECHO_BOLD_RED%$C_RESET"
   else
     echo "$C_RESET>"
@@ -116,14 +116,14 @@ function ps1_getpromptchar() {
 
 function ps1_getgitbranch() {
   local branch=`git_curbranch`
-  if [ ! "" == "$branch" ]; then
+  if [ -n "$branch" ]; then
     echo "$C_ECHO_MAGENTA$branch$C_ECHO_RESET:"
   fi
 }
 
 function ps1_getgitrepo() {
   local repo=`git_repo`
-  if [ ! "" == "$repo" ]; then
+  if [ -n "$repo" ]; then
     echo "$C_ECHO_BOLD_MAGENTA$repo$C_ECHO_RESET:"
   fi
 }

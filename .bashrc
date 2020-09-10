@@ -20,8 +20,8 @@
 ###### .PRECUSTOM BASHRC OPTIONS ######
 # export QUITNOW=1      - Signifies for bashrc to stop processing.
 
-if [ -f "${HOME}/.bash_precustom" ]; then
-  source "${HOME}/.bash_precustom"
+if [ -f .bash_precustom ]; then
+  source .bash_precustom
 
   # Don't include any other customizations.
   if [ "$QUITNOW" == "1" ]; then
@@ -67,7 +67,7 @@ if [ "Darwin" = `uname` ]; then
   export ISMAC=1
 fi
 
-if [[ `uname` == CYGWIN* ]]; then
+if [[ `uname` = CYGWIN* ]]; then
   export ISCYG=1
 fi
 
@@ -209,15 +209,15 @@ fi
 # NOSCREEN can also be set to 1 previous to this if you want to force not using screen.
 
 # am I already in screen?
-if [ "$STY" != "" ]; then
+if [ -n "$STY" ]; then
   export NOSCREEN=1
 fi
 
-if [ "$USER" == 'root' ] && [ `logname` != 'root' ]; then
+if [ "$USER" == 'root' ] && [ "$(logname)" != 'root' ]; then
   export NOSCREEN=1
 fi
 
-if [ ! -f "${HOME}/.screenrc" ]; then
+if [ ! -f .screenrc ]; then
   export NOSCREEN=1
 fi
 
@@ -242,8 +242,7 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 if [ $ISMAC = 1 ]; then
-  # brew install bash-completion
-  if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
+  if [ -f "/usr/local/etc/profile.d/bash_completion.sh" ]; then
     . "/usr/local/etc/profile.d/bash_completion.sh"
   else
     echo "You may need to: brew install bash-completion"
@@ -251,13 +250,14 @@ if [ $ISMAC = 1 ]; then
 fi
 
 # Git completion from: https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
-if [ -f "${HOME}/.git-completion.bash" ]; then
-  source "${HOME}/.git-completion.bash"
+if [ -f .git-completion.bash ]; then
+  source .git-completion.bash
 fi
 
-if [ "$BASH_FUNCTION_COMPLETION_FILES" == "" ]; then
+if [ -z "$BASH_FUNCTION_COMPLETION_FILES" ]; then
   export BASH_FUNCTION_COMPLETION_FILES=()
 fi
+
 BASH_FUNCTION_COMPLETION_FILES+=("home_setup.sh")
 export BASH_FUNCTION_COMPLETION_FILES
 
@@ -265,12 +265,12 @@ export BASH_FUNCTION_COMPLETION_FILES
 #  SOURCE MY DOT FILES  #
 #########################
 
-if [ -f "${HOME}/.bash_functions" ]; then
-  source "${HOME}/.bash_functions"
+if [ -f .bash_functions ]; then
+  source .bash_functions
 fi
 
-if [ -f "${HOME}/.bash_aliases" ]; then
-  source "${HOME}/.bash_aliases"
+if [ -f .bash_aliases ]; then
+  source .bash_aliases
 fi
 
 
@@ -286,20 +286,22 @@ export PS1=`ps1_myprompt`
 #  SOURCE LOCAL CUSTOMIZATIONS  #
 #################################
 
-if [ -f "${HOME}/.bash_custom" ]; then
+if [ -f .bash_custom ]; then
   # This is where I'll set my timezone (This way the timezone can be set based on the server location.)
   # export TZ='America/New_York';
-  source "${HOME}/.bash_custom"
+  source .bash_custom
 fi
 
 ###### .BASH_CUSTOM OPTIONS ######
 # export BASH_FUNCTION_COMPLETION_FILES+=("filename.sh")  - autocomplete functions within filename.sh
-#    The above SHOULD be ok but mac bash sometimes has issues. In that case update the array and the export the variable in the next line like:
+#    The above SHOULD be ok but mac bash sometimes has issues.
+#    In that case update the array and then export the variable in the next line like:
+#
 #    BASH_FUNCTION_COMPLETION_FILES+=("filename.sh")
 #    export BASH_FUNCTION_COMPLETION_FILES
 
-if [ -f "${HOME}/bin/bash_function_completion.sh" ]; then
-  source "${HOME}/bin/bash_function_completion.sh"
+if [ -f bin/bash_function_completion.sh ]; then
+  source bin/bash_function_completion.sh
 fi
 
 
