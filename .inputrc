@@ -19,3 +19,6 @@
 "\eOH": beginning-of-line
 "\eOF": end-of-line
 
+# on tab, don't ring the bell before showing tab completion options
+set show-all-if-ambiguous On
+
