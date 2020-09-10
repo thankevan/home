@@ -56,7 +56,8 @@ function addcolumn() {
 
 
 function git_curbranch() {
-  git branch 2>/dev/null |grep '^\*'|awk '{print $2}'
+  #git branch 2>/dev/null |grep '^\*'|awk '{print $2}'
+  git rev-parse --abbrev-ref HEAD 2>/dev/null
 }
 
 function git_repo() {
