@@ -3,6 +3,7 @@
 # If not running interactively, don't do anything.
 [[ "$-" != *i* ]] && return
 
+CURDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 #########################################
 #  SOURCE LOCAL INITIAL CUSTOMIZATIONS  #
@@ -20,8 +21,8 @@
 ###### .PRECUSTOM BASHRC OPTIONS ######
 # export QUITNOW=1      - Signifies for bashrc to stop processing.
 
-if [ -f .bash_precustom ]; then
-  source .bash_precustom
+if [ -f "$CURDIR/.bash_precustom" ]; then
+  source "$CURDIR/.bash_precustom"
 
   # Don't include any other customizations.
   if [ "$QUITNOW" == "1" ]; then
@@ -108,7 +109,7 @@ shopt -s checkwinsize
 # User specific scripts.
 # bin       is intended for scripts propogated everywhere.
 # scripts   is intended for scripts just for the current machine.
-export PATH=$PATH:$HOME/bin:$HOME/scripts
+export PATH=$PATH:$CURDIR/bin:$CURDIR/scripts
 
 
 ############
@@ -213,11 +214,11 @@ if [ -n "$STY" ]; then
   export NOSCREEN=1
 fi
 
-if [ "$USER" == 'root' ] && [ "$(logname)" != 'root' ]; then
+if [ "$USER" == 'root' ] && [ "$(logname 2>/dev/null)" != 'root' ]; then
   export NOSCREEN=1
 fi
 
-if [ ! -f .screenrc ]; then
+if [ ! -f "$CURDIR/.screenrc" ]; then
   export NOSCREEN=1
 fi
 
@@ -250,8 +251,8 @@ if [ $ISMAC = 1 ]; then
 fi
 
 # Git completion from: https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
-if [ -f .git-completion.bash ]; then
-  source .git-completion.bash
+if [ -f "$CURDIR/.git-completion.bash" ]; then
+  source "$CURDIR/.git-completion.bash"
 fi
 
 if [ -z "$BASH_FUNCTION_COMPLETION_FILES" ]; then
@@ -265,12 +266,12 @@ export BASH_FUNCTION_COMPLETION_FILES
 #  SOURCE MY DOT FILES  #
 #########################
 
-if [ -f .bash_functions ]; then
-  source .bash_functions
+if [ -f "$CURDIR/.bash_functions" ]; then
+  source "$CURDIR/.bash_functions"
 fi
 
-if [ -f .bash_aliases ]; then
-  source .bash_aliases
+if [ -f "$CURDIR/.bash_aliases" ]; then
+  source "$CURDIR/.bash_aliases"
 fi
 
 
@@ -286,10 +287,10 @@ export PS1=`ps1_myprompt`
 #  SOURCE LOCAL CUSTOMIZATIONS  #
 #################################
 
-if [ -f .bash_custom ]; then
+if [ -f "$CURDIR/.bash_custom" ]; then
   # This is where I'll set my timezone (This way the timezone can be set based on the server location.)
   # export TZ='America/New_York';
-  source .bash_custom
+  source "$CURDIR/.bash_custom"
 fi
 
 ###### .BASH_CUSTOM OPTIONS ######
@@ -300,8 +301,8 @@ fi
 #    BASH_FUNCTION_COMPLETION_FILES+=("filename.sh")
 #    export BASH_FUNCTION_COMPLETION_FILES
 
-if [ -f bin/bash_function_completion.sh ]; then
-  source bin/bash_function_completion.sh
+if [ -f "$CURDIR/bin/bash_function_completion.sh" ]; then
+  source "$CURDIR/bin/bash_function_completion.sh"
 fi
 
 
