@@ -211,6 +211,10 @@ function setup_git_global_configs {
 }
 
 function mac_setup {
+  if [[ $ISMAC != 1 ]]; then
+    return 0
+  fi
+
   echo ""
   echo "DO MAC SETUP"
   echo "------------"
@@ -264,9 +268,7 @@ function mac_default_to_bash {
 
 function run_all {
   check_if_home_directory
-  if [[ $ISMAC == 1 ]]; then
-    mac_setup
-  fi
+  mac_setup
   setup_ssh_key
   instruct_ssh_key_to_github
   backup_bash_files
