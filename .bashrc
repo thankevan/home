@@ -335,8 +335,9 @@ export PS1=`ps1_myprompt`
 #################################
 
 if [ -f "$CURDIR/.bash_custom" ]; then
-  # This is where I'll set my timezone (This way the timezone can be set based on the server location.)
+  # This is where I'll set my timezone so it can be based on the server location
   # export TZ='America/New_York';
+  # Also, if I have machine related customizations in another folder, I'll call them from here
   source "$CURDIR/.bash_custom"
 fi
 
