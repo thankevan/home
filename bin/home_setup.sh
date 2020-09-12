@@ -225,7 +225,7 @@ function mac_install_homebrew {
   echo "MAC INSTALL HOMEBREW"
   echo "--------------------"
 
-  if [[ "$(command -v brew)" != "" ]]; then
+  if [ -n "$(command -v brew)" ]; then
     echo "homebrew already installed"
     return 0
   fi
@@ -239,7 +239,7 @@ function mac_install_commands_via_brew {
   echo "MAC INSTALL COMMANDS VIA BREW"
   echo "-----------------------------"
 
-  if [[ "$(command -v brew)" = "" ]]; then
+  if [ -z "$(command -v brew)" ]; then
     echo "brew not installed"
     exit 1
   fi
