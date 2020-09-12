@@ -192,12 +192,15 @@ esac
 # Default to prod, set explicitely in .bash_precustom
 if [ $CODE_ENV == 'DEV' ]; then
   export ENV_SCREEN_COLOR='bw'
+  export ENV_TMUX_COLOR='bg=blue,fg=white'
   export ENV_PS_COLOR=$C_ECHO_BOLD_BLUE
 elif [ $CODE_ENV == 'TEST' ]; then
   export ENV_SCREEN_COLOR='yb'
+  export ENV_TMUX_COLOR='bg=yellow,fg=black'
   export ENV_PS_COLOR=$C_ECHO_YELLOW
 else
   export ENV_SCREEN_COLOR='rw'
+  export ENV_TMUX_COLOR='bg=red,fg=white'
   export ENV_PS_COLOR=$C_ECHO_RED
 fi
 
@@ -209,22 +212,66 @@ fi
 # Do some checks to see if screen should not be used.
 # NOSCREEN can also be set to 1 previous to this if you want to force not using screen.
 
+# screen not installed
+if [ -z "$(command -v screen)" ]; then
+  export NOSCREEN=1
+fi
+
 # am I already in screen?
 if [ -n "$STY" ]; then
   export NOSCREEN=1
 fi
 
+# no screen if I logged in directly as root
 if [ "$USER" == 'root' ] && [ "$(logname 2>/dev/null)" != 'root' ]; then
   export NOSCREEN=1
 fi
 
+# no screen if there's no config
 if [ ! -f "$CURDIR/.screenrc" ]; then
   export NOSCREEN=1
 fi
 
-# Reattach to screen if there is one available
+# Reattach to screen if there is one available or create new session
 if [ "$NOSCREEN" != 1 ]; then
   screen -RR
+fi
+
+
+##########
+#  TMUX  #
+##########
+
+# Do some checks to see if tmux should not be used.
+# NOTMUX can also be set to 1 previous to this if you want to force not using tmux.
+
+# tmux not installed
+if [ -z "$(command -v tmux)" ]; then
+  export NOTMUX=1
+fi
+
+# am I already in tmux?
+if [ -n "$TMUX" ]; then
+  export NOTMUX=1
+fi
+
+# no tmux if I logged in directly as root
+if [ "$USER" == 'root' ] && [ "$(logname 2>/dev/null)" != 'root' ]; then
+  export NOTMUX=1
+fi
+
+# no tmux if there's no config
+if [ ! -f "$CURDIR/.tmux.conf" ]; then
+  export NOTMUX=1
+fi
+
+# Reattach to tmux if there is one available or create new session
+if [ "$NOTMUX" != 1 ]; then
+  # set the status coloring here since you can't use variables in the config
+  tmux set-option -g status-style $ENV_TMUX_COLOR
+
+  tmux_attach_flag=$(tmux ls | grep -qv 'attached)$' && echo "attach -d")
+  tmux $tmux_attach_flag
 fi
 
 

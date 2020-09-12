@@ -165,13 +165,20 @@ function setup_custom_dot_files {
 
   read -p 'Pick environment (DEV|TEST|PROD): ' ENV_LEVEL
   read -p 'Skip screen? (1): ' SKIP_SCREEN
+  read -p 'Skip tmux? (1): ' SKIP_TMUX
 
   echo "#!/bin/bash" >> .bash_precustom
   echo "#!/bin/bash" >> .bash_custom
 
+  # .bash_precustom
   echo "export CODE_ENV=$ENV_LEVEL" >> .bash_precustom
+
   if [ "$SKIP_SCREEN" = "1" ]; then
     echo "export NOSCREEN=$SKIP_SCREEN" >> .bash_precustom
+  fi
+
+  if [ "$SKIP_TMUX" = "1" ]; then
+    echo "export NOTMUX=$SKIP_TMUX" >> .bash_precustom
   fi
 
   if [ $ISMAC = 1 ]; then
