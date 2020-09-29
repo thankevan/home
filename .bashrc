@@ -267,10 +267,7 @@ fi
 
 # Reattach to tmux if there is one available or create new session
 if [ "$NOTMUX" != 1 ]; then
-  # set the status coloring here since you can't use variables in the config
-  tmux set-option -g status-style $ENV_TMUX_COLOR
-
-  tmux_attach_flag=$(tmux ls | grep -qv 'attached)$' && echo "attach -d")
+  tmux_attach_flag=$(tmux ls 2>/dev/null | grep -qv 'attached)$' && echo "attach -d")
   tmux $tmux_attach_flag
 fi
 
