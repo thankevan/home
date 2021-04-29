@@ -146,8 +146,9 @@ function clone_home {
 
   git init
   git remote add origin "$GITHUB_HOME_REPO"
+  echo "Pick yes if given an option"
   git fetch origin
-  git checkout origin/master -ft
+  git checkout origin/main -ft
 
   git config user.name "$GITHUB_HOME_USER"
   git config user.email "$GITHUB_HOME_EMAIL"
@@ -249,6 +250,8 @@ function mac_install_commands_via_brew {
   fi
 
   for cmd in \
+    bash-completion \
+    tmux \
     gnu-sed \
     grep \
     wget; do
