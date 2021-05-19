@@ -81,6 +81,12 @@ nnoremap # #zz
 """""""""""""""""""""""""""""""""""""""
 "  TABS, WHITESPACE, AND INDENTATION  "
 """""""""""""""""""""""""""""""""""""""
+" To toggle viewing whitespace:
+" set list!
+"
+" To prevent converting tabs to spaces:
+" set noexpandtab
+
 " Turn on indenting.
 set autoindent
 set smartindent
