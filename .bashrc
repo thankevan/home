@@ -338,7 +338,10 @@ if [ -f "$CURDIR/.bash_custom" ]; then
   source "$CURDIR/.bash_custom"
 fi
 
-###### .BASH_CUSTOM OPTIONS ######
+##############################
+#  CUSTOM COMPLETION SCRIPTS #
+##############################
+
 # export BASH_FUNCTION_COMPLETION_FILES+=("filename.sh")  - autocomplete functions within filename.sh
 #    The above SHOULD be ok but mac bash sometimes has issues.
 #    In that case update the array and then export the variable in the next line like:
@@ -349,5 +352,11 @@ fi
 if [ -f "$CURDIR/bin/bash_function_completion.sh" ]; then
   source "$CURDIR/bin/bash_function_completion.sh"
 fi
+
+if [ -f "$CURDIR/bin/docker_script_completion.sh" ]; then
+  source "$CURDIR/bin/docker_script_completion.sh"
+fi
+
+###### .BASH_CUSTOM OPTIONS ######
 
 
