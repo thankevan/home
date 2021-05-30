@@ -146,7 +146,13 @@ function clone_home {
 
   git init
   git remote add origin "$GITHUB_HOME_REPO"
-  echo "Pick yes if given an option"
+
+  # missed this in the past, making it bright yellow [33
+  # 5 is to make it try to blink if blinking is supported
+  # 7 inverts so it's black text on yellow background to make it stand out even more
+  echo -e "\033[33;5;7m*******************************\033[0m"
+  echo -e "\033[33;5;7m* Pick yes if given an option *\033[0m"
+  echo -e "\033[33;5;7m*******************************\033[0m"
   git fetch origin
   git checkout origin/main -ft
 
@@ -165,8 +171,8 @@ function setup_custom_dot_files {
   fi
 
   read -p 'Pick environment (DEV|TEST|PROD): ' ENV_LEVEL
-  read -p 'Skip screen? (1): ' SKIP_SCREEN
-  read -p 'Skip tmux? (1): ' SKIP_TMUX
+  read -p 'Skip screen? (1|<enter to not skip>): ' SKIP_SCREEN
+  read -p 'Skip tmux? (1|<enter to not skip>): ' SKIP_TMUX
 
   echo "#!/bin/bash" >> .bash_precustom
   echo "#!/bin/bash" >> .bash_custom
@@ -206,6 +212,9 @@ function setup_git_global_configs {
   # change how push works to automatically set upstream (needs >git push -u on the first push)
   git config --global push.default current
 
+  # git makes you set up what your pull strategy is now, this is the old default which is to merge
+  git config --global pull.rebase false
+
   # other things to try from: git help config
   # git config --global branch.autoSetupMerge always
   # git config --global branch.autoSetupRebase always
@@ -219,6 +228,8 @@ function mac_setup {
   echo ""
   echo "DO MAC SETUP"
   echo "------------"
+
+  echo -e "In iTerm Preferences->Text check:\nUse built-in Powerline glyphs\nBlinking text"
 
   mac_install_homebrew
   mac_install_commands_via_brew
@@ -280,7 +291,7 @@ function check_for_powerline_fonts {
   fi
 
   echo -e "Powerline glyphs:\n\
-    Code points Glyphe  Description                Old code point
+    Code points Glyph   Description                Old code point
     U+E0A0      \xee\x82\xa0       Version control branch     (U+2B60 \xe2\xad\xa0 )\n\
     U+E0A1      \xee\x82\xa1       LN (line) symbol           (U+2B61 \xe2\xad\xa1 )\n\
     U+E0A2      \xee\x82\xa2       Closed padlock             (U+2B64 \xe2\xad\xa4 )\n\
