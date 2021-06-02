@@ -345,7 +345,7 @@ fi
 #    BASH_FUNCTION_COMPLETION_FILES+=("filename.sh")
 #    export BASH_FUNCTION_COMPLETION_FILES
 
-for f in $BASHRC_DIR/bin/completion/*
+for f in $BASHRC_DIR/bin/completion/*.*sh
 do
   if [ -f "$f" ]; then
     source "$f"
