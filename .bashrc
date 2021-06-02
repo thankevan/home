@@ -3,7 +3,7 @@
 # If not running interactively, don't do anything.
 [[ "$-" != *i* ]] && return
 
-CURDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+BASHRC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 #########################################
 #  SOURCE LOCAL INITIAL CUSTOMIZATIONS  #
@@ -21,8 +21,8 @@ CURDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 ###### .PRECUSTOM BASHRC OPTIONS ######
 # export QUITNOW=1      - Signifies for bashrc to stop processing.
 
-if [ -f "$CURDIR/.bash_precustom" ]; then
-  source "$CURDIR/.bash_precustom"
+if [ -f "$BASHRC_DIR/.bash_precustom" ]; then
+  source "$BASHRC_DIR/.bash_precustom"
 
   # Don't include any other customizations.
   if [ "$QUITNOW" == "1" ]; then
@@ -109,7 +109,7 @@ shopt -s checkwinsize
 # User specific scripts.
 # bin       is intended for scripts propogated everywhere.
 # scripts   is intended for scripts just for the current machine.
-export PATH=$PATH:$CURDIR/bin:$CURDIR/scripts
+export PATH=$PATH:$BASHRC_DIR/bin:$BASHRC_DIR/scripts
 
 
 ############
@@ -228,7 +228,7 @@ if [ "$USER" == 'root' ] && [ "$(logname 2>/dev/null)" != 'root' ]; then
 fi
 
 # no screen if there's no config
-if [ ! -f "$CURDIR/.screenrc" ]; then
+if [ ! -f "$BASHRC_DIR/.screenrc" ]; then
   export NOSCREEN=1
 fi
 
@@ -261,7 +261,7 @@ if [ "$USER" == 'root' ] && [ "$(logname 2>/dev/null)" != 'root' ]; then
 fi
 
 # no tmux if there's no config
-if [ ! -f "$CURDIR/.tmux.conf" ]; then
+if [ ! -f "$BASHRC_DIR/.tmux.conf" ]; then
   export NOTMUX=1
 fi
 
@@ -279,9 +279,9 @@ fi
 export TERM=xterm
 
 
-#####################
-#  BASH COMPLETION  #
-#####################
+#########################################################
+#  BASH COMPLETION & SETUP FOR CUSTOM COMPLETIONS BELOW #
+#########################################################
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
@@ -292,11 +292,6 @@ if [ $ISMAC = 1 ]; then
   else
     echo "You may need to: brew install bash-completion"
   fi
-fi
-
-# Git completion from: https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
-if [ -f "$CURDIR/.git-completion.bash" ]; then
-  source "$CURDIR/.git-completion.bash"
 fi
 
 if [ -z "$BASH_FUNCTION_COMPLETION_FILES" ]; then
@@ -310,12 +305,12 @@ export BASH_FUNCTION_COMPLETION_FILES
 #  SOURCE MY DOT FILES  #
 #########################
 
-if [ -f "$CURDIR/.bash_functions" ]; then
-  source "$CURDIR/.bash_functions"
+if [ -f "$BASHRC_DIR/.bash_functions" ]; then
+  source "$BASHRC_DIR/.bash_functions"
 fi
 
-if [ -f "$CURDIR/.bash_aliases" ]; then
-  source "$CURDIR/.bash_aliases"
+if [ -f "$BASHRC_DIR/.bash_aliases" ]; then
+  source "$BASHRC_DIR/.bash_aliases"
 fi
 
 
@@ -331,17 +326,18 @@ export PS1=`ps1_myprompt`
 #  SOURCE LOCAL CUSTOMIZATIONS  #
 #################################
 
-if [ -f "$CURDIR/.bash_custom" ]; then
+if [ -f "$BASHRC_DIR/.bash_custom" ]; then
   # This is where I'll set my timezone so it can be based on the server location
   # export TZ='America/New_York';
   # Also, if I have machine related customizations in another folder, I'll call them from here
-  source "$CURDIR/.bash_custom"
+  source "$BASHRC_DIR/.bash_custom"
 fi
 
 ##############################
 #  CUSTOM COMPLETION SCRIPTS #
 ##############################
 
+# for bash_function_completion.sh :
 # export BASH_FUNCTION_COMPLETION_FILES+=("filename.sh")  - autocomplete functions within filename.sh
 #    The above SHOULD be ok but mac bash sometimes has issues.
 #    In that case update the array and then export the variable in the next line like:
@@ -349,14 +345,11 @@ fi
 #    BASH_FUNCTION_COMPLETION_FILES+=("filename.sh")
 #    export BASH_FUNCTION_COMPLETION_FILES
 
-if [ -f "$CURDIR/bin/bash_function_completion.sh" ]; then
-  source "$CURDIR/bin/bash_function_completion.sh"
-fi
-
-if [ -f "$CURDIR/bin/docker_script_completion.sh" ]; then
-  source "$CURDIR/bin/docker_script_completion.sh"
-fi
-
-###### .BASH_CUSTOM OPTIONS ######
+for f in $BASHRC_DIR/bin/completion/*
+do
+  if [ -f "$f" ]; then
+    source "$f"
+  fi
+done
 
 
