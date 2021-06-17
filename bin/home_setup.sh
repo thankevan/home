@@ -212,8 +212,8 @@ function setup_git_global_configs {
   # change how push works to automatically set upstream (needs >git push -u on the first push)
   git config --global push.default current
 
-  # git makes you set up what your pull strategy is now, this is the old default which is to merge
-  git config --global pull.rebase false
+  # git makes you set up what your pull strategy is now, opting for rebase 
+  git config --global pull.rebase true
 
   # other things to try from: git help config
   # git config --global branch.autoSetupMerge always
