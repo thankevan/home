@@ -64,6 +64,10 @@ function git_repo() {
   basename -s ".git" `git config --get remote.origin.url` 2>/dev/null
 }
 
+function git_check_if_in_sync() {
+  # from: https://stackoverflow.com/a/25109122
+  [ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | sed 's#/# #g') | cut -f1) ] && echo "synced" || echo "unsynced" 2>/dev/null
+}
 
 ####################
 #  PROMPT HELPERS  #
@@ -83,6 +87,7 @@ function ps1_myprompt() {
   prompt+="$C_BOLD_GREEN@\h$C_RESET:"           # Bold Green:   @Machine Name
   prompt+="\$(ps1_getgitrepo)"                  # Bold Magenta: Git repo (trailing : existance base on the function).
   prompt+="\$(ps1_getgitbranch)"                # Magenta:      Git branch (trailing : existance base on the function).
+  prompt+="\$(ps1_getgitsynced)"                # Red/Green:    Git synced (trailing : existance base on the function).
   prompt+="$C_CYAN\w"                           # Cyan:         Path
   prompt+="$ENV_PS_COLOR$(ps1_getwrap)"         # Env Color:    Prompt top line wrapper based on whether user is root.
   prompt+="\n"                                  #               Newline to give the path space without interfering.
@@ -125,6 +130,17 @@ function ps1_getgitrepo() {
   local repo=`git_repo`
   if [ -n "$repo" ]; then
     echo "$C_ECHO_BOLD_MAGENTA$repo$C_ECHO_RESET:"
+  fi
+}
+
+function ps1_getgitsynced() {
+  if [ -n "$(git_repo)" ]; then
+    local synced=`git_check_if_in_sync`
+    if [ "$synced" = "synced" ]; then
+      echo "${C_ECHO_GREEN}≡$C_ECHO_RESET:"
+    else
+      echo "${C_ECHO_RED}≠$C_ECHO_RESET:"
+    fi
   fi
 }
 
