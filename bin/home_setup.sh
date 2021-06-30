@@ -306,6 +306,12 @@ function check_for_powerline_fonts {
     echo "export POWERLINE_INSTALLED=1" >> .bash_precustom
   else
     echo "Check out https://github.com/ryanoasis/nerd-fonts"
+    echo ""
+    echo "For Windows, Inconsolata (use partial smoothing in cygwin):"
+    echo "https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Inconsolata"
+    echo ""
+    echo "For Mac, Monoco patched font:"
+    echo "https://gist.github.com/lujiacn/32b598b1a6a43c996cbd93d42d466466"
   fi
 }
 
