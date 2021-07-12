@@ -229,7 +229,14 @@ function mac_setup {
   echo "DO MAC SETUP"
   echo "------------"
 
-  echo -e "In iTerm Preferences->Text check:\nUse built-in Powerline glyphs\nBlinking text"
+  echo "defaults write..."
+
+  # turn on file extensions in the finder
+  echo "Show file extensions"
+  defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+  killall Finder
+
 
   mac_install_homebrew
   mac_install_commands_via_brew
@@ -310,8 +317,15 @@ function check_for_powerline_fonts {
     echo "For Windows, Inconsolata (use partial smoothing in cygwin):"
     echo "https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Inconsolata"
     echo ""
-    echo "For Mac, Monoco patched font:"
+    echo "For Mac:"
+    echo "In iTerm Preferences->Profiles->Text:Text Rendering check:"
+    echo "   Use built-in Powerline glyphs"
+    echo "   Blinking text"
+    echo ""
+    echo "Alternately use, Monoco patched font:"
     echo "https://gist.github.com/lujiacn/32b598b1a6a43c996cbd93d42d466466"
+
+    pause
   fi
 }
 
