@@ -21,6 +21,7 @@
 .rediscli_history
 .ssh/
 .sudo_as_admin_successful
+.viminfo
 .vscode/
 .vscode-server/
 .wget-hsts
