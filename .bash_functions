@@ -82,7 +82,7 @@ function ps1_myprompt() {
 
   local prompt=""
   prompt+="$ENV_PS_COLOR$(ps1_getwrap)"         # Env Color:    Prompt top line wrapper based on whether user is root.
-  prompt+="$C_BOLD_YELLOW\D{%I:%M%P}$C_RESET:"  # Yellow:       The time.
+  prompt+="$C_BOLD_YELLOW\D{%I:%M%p}$C_RESET:"  # Yellow:       The time, upper case meridiem because lower doesn't exist for mac
   prompt+="$(ps1_getuser)"                      # RED/GREEN:    Username with color based on whether user is root.
   prompt+="$C_BOLD_GREEN@\h$C_RESET:"           # Bold Green:   @Machine Name
   prompt+="\$(ps1_getgitrepo)"                  # Bold Magenta: Git repo (trailing : existance base on the function).
