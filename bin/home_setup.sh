@@ -272,6 +272,8 @@ function mac_install_commands_via_brew {
     tmux \
     gnu-sed \
     grep \
+    "--cask rectangle" \
+    "--cask iterm2" \
     wget; do
 
     brew install $cmd
@@ -325,7 +327,7 @@ function check_for_powerline_fonts {
     echo "Alternately use, Monoco patched font:"
     echo "https://gist.github.com/lujiacn/32b598b1a6a43c996cbd93d42d466466"
 
-    pause
+    read -p ""
   fi
 }
 
