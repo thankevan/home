@@ -267,6 +267,9 @@ function mac_install_commands_via_brew {
     exit 1
   fi
 
+  # This is for cameracontroller to fix webcam issues
+  brew tap homebrew/cask-drivers
+
   for cmd in \
     bash-completion \
     tmux \
@@ -274,6 +277,7 @@ function mac_install_commands_via_brew {
     grep \
     "--cask rectangle" \
     "--cask iterm2" \
+    "--cask cameracontroller" \
     wget; do
 
     brew install $cmd
