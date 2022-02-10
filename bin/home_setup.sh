@@ -50,12 +50,63 @@ function setup_ssh_key {
   fi
 
   read -p 'Email address for ssh-key tag: ' EMAIL
-  if [ "$EMAIL" == "" ]; then
+  if [ -z "$EMAIL" ]; then
     echo "ERROR: email address cannot be blank"
     exit 1
   fi
   echo "Email: $EMAIL"
   ssh-keygen -t rsa -b 4096 -C "$EMAIL"
+
+  read -p 'Setup a second personal ssh-key? (y/n): ' SECONDSSH
+  if [ "$SECONDSSH" == "y" ]; then
+    read -p 'Email address for second ssh-key tag: ' EMAIL2
+    if [ -z "$EMAIL2" ]; then
+      echo "ERROR: email address cannot be blank"
+      exit 1
+    fi
+    echo "Email: $EMAIL2"
+    ssh-keygen -t rsa -b 4096 -C "$EMAIL2" -f ~/.ssh/id_rsa_personal.pub
+
+    echo "# Default github account" >> ~/.ssh/config
+    echo "Host github.com" >> /.ssh/config
+    echo "   HostName github.com" >> /.ssh/config
+    echo "   IdentityFile ~/.ssh/id_rsa" >> /.ssh/config
+    echo "   IdentitiesOnly yes" >> /.ssh/config
+    echo "" >> /.ssh/config
+    echo "# Personal github account" >> /.ssh/config
+    echo "Host github-personal" >> /.ssh/config
+    echo "   HostName github.com" >> /.ssh/config
+    echo "   IdentityFile ~/.ssh/id_rsa_pesonal" >> /.ssh/config
+    echo "   IdentitiesOnly yes" >> /.ssh/config
+  fi
+}
+
+function open_url_in_browser {
+  if [ $ISWSL == 1 ]; then
+    powershell.exe /c start "$1"
+  fi
+
+  if [ $ISCYG == 1 ]; then
+    cygstart "$1"
+  fi
+
+  if [ $ISMAC == 1 ]; then
+    open "$1"
+  fi
+}
+
+function copy_file_to_clipboard {
+  if [ $ISWSL == 1 ]; then
+    cat "$1" | clip.exe
+  fi
+
+  if [ $ISCYG == 1 ]; then
+    cat "$1" > /dev/clipboard
+  fi
+
+  if [ $ISMAC == 1 ]; then
+    pbcopy < "$1"
+  fi
 }
 
 function instruct_ssh_key_to_github {
@@ -70,22 +121,15 @@ function instruct_ssh_key_to_github {
 
   GITHUB_SETTINGS_URL="https://github.com/settings/keys"
 
-  if [ $ISWSL == 1 ]; then
-    powershell.exe /c start "$GITHUB_SETTINGS_URL"
-    cat ~/.ssh/id_rsa.pub | clip.exe
-  fi
-
-  if [ $ISCYG == 1 ]; then
-    cygstart "$GITHUB_SETTINGS_URL"
-    cat ~/.ssh/id_rsa.pub > /dev/clipboard
-  fi
-
-  if [ $ISMAC == 1 ]; then
-    open "$GITHUB_SETTINGS_URL"
-    pbcopy < ~/.ssh/id_rsa.pub
-  fi
-
+  open_url_in_browser "$GITHUB_SETTINGS_URL"
+  copy_file_to_clipboard "$HOME/.ssh/id_rsa.pub"
   read -p "ssh key copied to clipboard, add to github, then hit enter"
+
+  if [ -e ~/.ssh/id_rsa_personal.pub ]; then
+    open_url_in_browser "$GITHUB_SETTINGS_URL"
+    copy_file_to_clipboard "$HOME/.ssh/id_rsa_personal.pub"
+    read -p "personal ssh key copied to clipboard, add to github, then hit enter"
+  fi
 }
 
 function backup_bash_files {
