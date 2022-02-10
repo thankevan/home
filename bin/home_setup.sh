@@ -170,26 +170,68 @@ function setup_custom_dot_files {
     return 0
   fi
 
-  read -p 'Pick environment (DEV|TEST|PROD): ' ENV_LEVEL
-  read -p 'Skip screen? (1|<enter to not skip>): ' SKIP_SCREEN
-  read -p 'Skip tmux? (1|<enter to not skip>): ' SKIP_TMUX
-
   echo "#!/bin/bash" >> .bash_precustom
   echo "#!/bin/bash" >> .bash_custom
 
-  # .bash_precustom
+  # environment
+  read -p 'Pick environment (DEV|TEST|PROD): ' ENV_LEVEL
   echo "export CODE_ENV=$ENV_LEVEL" >> .bash_precustom
 
+  # screen
+  read -p 'Skip screen? (1|<enter to not skip>): ' SKIP_SCREEN
   if [ "$SKIP_SCREEN" = "1" ]; then
     echo "export NOSCREEN=$SKIP_SCREEN" >> .bash_precustom
   fi
 
+  # tmux
+  read -p 'Skip tmux? (1|<enter to not skip>): ' SKIP_TMUX
   if [ "$SKIP_TMUX" = "1" ]; then
     echo "export NOTMUX=$SKIP_TMUX" >> .bash_precustom
   fi
 
+  # mac
   if [ $ISMAC = 1 ]; then
     echo "export BASH_SILENCE_DEPRECATION_WARNING=1" >> .bash_precustom
+  fi
+
+  # personal github user
+  PERSONAL_GITHUB_USER=""
+  if [ -n "$GITHUB_HOME_USER" ]; then
+    read -p 'Use $GITHUB_HOME_USER as PERSONAL_GITHUB_USER? (1|<enter for no>):' GITHUB_HOME_USER_AS_PERSONAL
+    if [ "$GITHUB_HOME_USER_AS_PERSONAL" == "1" ]; then
+      PERSONAL_GITHUB_USER="$GITHUB_HOME_USER"
+    fi
+  fi
+
+  if [ -z "$PERSONAL_GITHUB_USER" ]; then
+    read -p 'PERSONAL_GITHUB_USER (enter to skip):' PERSONAL_GITHUB_USER
+  fi
+
+  if [ -n "$PERSONAL_GITHUB_USER" ]; then
+    echo "export PERSONAL_GITHUB_USER=$PERSONAL_GITHUB_USER" >> .bash_precustom
+  fi
+
+  # personal github email
+  PERSONAL_GITHUB_EMAIL=""
+  if [ -n "$GITHUB_HOME_EMAIL" ]; then
+    read -p 'Use $GITHUB_HOME_EMAIL as PERSONAL_GITHUB_EMAIL? (1|<enter for no>):' GITHUB_HOME_EMAIL_AS_PERSONAL
+    if [ "$GITHUB_HOME_EMAIL_AS_PERSONAL" == "1" ]; then
+      PERSONAL_GITHUB_EMAIL="$GITHUB_HOME_EMAIL"
+    fi
+  fi
+
+  if [ -z "$PERSONAL_GITHUB_EMAIL" ]; then
+    read -p 'PERSONAL_GITHUB_EMAIL (enter to skip):' PERSONAL_GITHUB_EMAIL
+  fi
+
+  if [ -n "$PERSONAL_GITHUB_EMAIL" ]; then
+    echo "export PERSONAL_GITHUB_EMAIL=$PERSONAL_GITHUB_EMAIL" >> .bash_precustom
+  fi
+
+  # personal github ssh address
+  read -p 'PERSONAL_GITHUB_SSH_ADDRESS (enter to skip):' PERSONAL_GITHUB_SSH_ADDRESS
+  if [ -n "$PERSONAL_GITHUB_SSH_ADDRESS" ]; then
+    echo "export PERSONAL_GITHUB_SSH_ADDRESS=$PERSONAL_GITHUB_SSH_ADDRESS" >> .bash_precustom
   fi
 }
 
@@ -212,7 +254,7 @@ function setup_git_global_configs {
   # change how push works to automatically set upstream (needs >git push -u on the first push)
   git config --global push.default current
 
-  # git makes you set up what your pull strategy is now, opting for rebase 
+  # git makes you set up what your pull strategy is now, opting for rebase
   git config --global pull.rebase true
 
   # other things to try from: git help config
