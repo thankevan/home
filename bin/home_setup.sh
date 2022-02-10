@@ -24,7 +24,6 @@ if [[ $(uname -r) = *icrosoft* ]]; then
   ISWSL=1
 fi
 
-
 function check_if_home_directory {
   echo ""
   echo "CHECK IF HOME DIRECTORY"
@@ -299,10 +298,6 @@ function setup_git_global_configs {
 
   # git makes you set up what your pull strategy is now, opting for rebase
   git config --global pull.rebase true
-
-  # other things to try from: git help config
-  # git config --global branch.autoSetupMerge always
-  # git config --global branch.autoSetupRebase always
 }
 
 function mac_setup {
@@ -314,18 +309,20 @@ function mac_setup {
   echo "DO MAC SETUP"
   echo "------------"
 
-  echo "defaults write..."
+  mac_do_defaults_writes
+  mac_install_homebrew
+  mac_install_commands_via_brew
+  mac_default_to_bash
+}
+
+function mac_do_defaults_writes {
+  echo "DO DEFAULTS WRITES"
 
   # turn on file extensions in the finder
   echo "Show file extensions"
   defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 
   killall Finder
-
-
-  mac_install_homebrew
-  mac_install_commands_via_brew
-  mac_default_to_bash
 }
 
 function mac_install_homebrew {
