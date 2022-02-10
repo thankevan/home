@@ -375,6 +375,30 @@ function mac_default_to_bash {
   chsh -s /bin/bash
 }
 
+function set_colors {
+  echo ""
+  echo "SET COLORS"
+  echo "----------"
+
+  if [ "$COLORS_SET" == 1 ]; then
+    echo "colors set"
+    return 0
+  fi
+
+  blue=1e90ff
+  bold_blue=4444ff
+
+  read -p "Do blues look ok in prompt and ls? (y)" ARE_COLORS_GOOD
+
+  if [ "$ARE_COLORS_GOOD" == "y" ]; then
+    echo "export COLORS_SET=1" >> .bash_precustom
+  else
+    echo "Set blue: 1E90FF"
+    echo "Set bright/bold blue: 4444FF"
+    read -p ""
+  fi
+}
+
 function check_for_powerline_fonts {
   echo ""
   echo "POWERLINE"
@@ -425,6 +449,7 @@ function run_all {
   backup_bash_files
   clone_home
   setup_custom_dot_files
+  set_colors
   check_for_powerline_fonts
   setup_git_global_configs
 }

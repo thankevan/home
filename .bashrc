@@ -192,7 +192,7 @@ esac
 # Default to prod, set explicitely in .bash_precustom
 if [ $CODE_ENV == 'DEV' ]; then
   export ENV_SCREEN_COLOR='bw'
-  export ENV_TMUX_COLOR='bg=blue,fg=white'
+  export ENV_TMUX_COLOR='bg=#0000ff,fg=white'
   export ENV_PS_COLOR=$C_ECHO_BOLD_BLUE
 elif [ $CODE_ENV == 'TEST' ]; then
   export ENV_SCREEN_COLOR='yb'
