@@ -10,8 +10,6 @@ if [ -z "$PERSONAL_GITHUB_SSH_ADDRESS" ]; then
   exit 1
 fi
 
-ADDRESS="${1/git@github.com/$PERSONAL_GITHUB_SSH_ADDRESS}"
-
 if [ -z "$PERSONAL_GITHUB_EMAIL" ]; then
   echo '$PERSONAL_GITHUB_EMAIL required'
   exit 1
@@ -22,9 +20,10 @@ if [ -z "$PERSONAL_GITHUB_USER" ]; then
   exit 1
 fi
 
-REPO_GIT="${ADDRESS##*\/}"
-REPO_DIR="${REPO_GIT%.git}"
+ADDRESS="${1/git@github.com/$PERSONAL_GITHUB_SSH_ADDRESS}"
+REPO_DIR="$(basename -s .git $ADDRESS)"
 
+set -x
 git clone "$ADDRESS"
 cd "$REPO_DIR"
 git config user.name "$PERSONAL_GITHUB_USER"
