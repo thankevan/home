@@ -121,7 +121,6 @@ function backup_bash_files {
         cp --no-clobber "$file" "$BASH_BACKUP_DIR/"
       fi
     fi
-
   done
 
   if [ ! -f "$BASH_BACKUP_DIR/.profile" ]; then
@@ -310,7 +309,7 @@ function mac_install_commands_via_brew {
   fi
 
   # This is for cameracontroller to fix webcam issues
-  brew tap homebrew/cask-drivers
+  brew tap | grep cask-drivers || brew tap homebrew/cask-drivers
 
   for cmd in \
     bash-completion \
@@ -322,7 +321,7 @@ function mac_install_commands_via_brew {
     "--cask cameracontroller" \
     wget; do
 
-    brew install $cmd
+    brew list $cmd || brew install $cmd
 
   done
 }
