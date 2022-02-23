@@ -1,4 +1,3 @@
-
 **git-completion.bash**  
 - https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
 
@@ -10,3 +9,7 @@
 - https://github.com/docker/compose/blob/master/contrib/completion/bash/docker-compose
   - see also: https://docs.docker.com/compose/completion/
 
+**npm completion**  
+- https://docs.npmjs.com/cli/v7/commands/npm-completion
+  - `npm completion > .bash_npm_completion`
+  - `source .bash_npm_completion`
