@@ -64,9 +64,29 @@ function git_repo() {
   basename -s ".git" `git config --get remote.origin.url` 2>/dev/null
 }
 
+function git_branch_exists_remote() {
+  [ -z "$(git rev-parse --abbrev-ref @{u} 2>&1 1>/dev/null)" ] && echo "true" || echo "false"
+}
+
 function git_check_if_in_sync() {
-  # from: https://stackoverflow.com/a/25109122
-  [ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | sed 's#/# #g') | cut -f1) ] && echo "synced" || echo "unsynced" 2>/dev/null
+  local full_branch="" # need to pre-declare so $? is the result of the command rather than local
+  full_branch=$(git rev-parse --abbrev-ref @{u} 2>/dev/null)
+  if [ $? -ne 0 ]; then
+    echo "local_only"
+  else
+    local local_sha="$(git rev-parse HEAD 2>/dev/null)"
+
+    local spaced_branch=$(echo "$full_branch" | sed 's#/# #g')
+    local remote_sha_and_ref=$(git ls-remote $spaced_branch 2>/dev/null)
+    local remote_sha=$(echo "$remote_sha_and_ref" | cut -f1)
+    # typeset -p local_sha full_branch spaced_branch remote_sha_and_ref remote_sha
+
+    if [ "$local_sha" = "$remote_sha" ]; then
+      echo "synced"
+    else
+      echo "unsynced"
+    fi
+  fi
 }
 
 ####################
@@ -87,7 +107,7 @@ function ps1_myprompt() {
   prompt+="$C_BOLD_GREEN@\h$C_RESET:"           # Bold Green:   @Machine Name
   prompt+="\$(ps1_getgitrepo)"                  # Bold Magenta: Git repo (trailing : existance base on the function).
   prompt+="\$(ps1_getgitbranch)"                # Magenta:      Git branch (trailing : existance base on the function).
-  prompt+="\$(ps1_getgitsynced)"                # Red/Green:    Git synced (trailing : existance base on the function).
+#  prompt+="\$(ps1_getgitsynced)"                # Red/Yellow/Green:    Git synced (trailing : existance base on the function).
   prompt+="$C_CYAN\w"                           # Cyan:         Path
   prompt+="$ENV_PS_COLOR$(ps1_getwrap)"         # Env Color:    Prompt top line wrapper based on whether user is root.
   prompt+="\n"                                  #               Newline to give the path space without interfering.
@@ -135,8 +155,10 @@ function ps1_getgitrepo() {
 
 function ps1_getgitsynced() {
   if [ -n "$(git_repo)" ]; then
-    local synced=`git_check_if_in_sync`
-    if [ "$synced" = "synced" ]; then
+    local sync_status=`git_check_if_in_sync`
+    if [ "$sync_status" = "local_only" ]; then
+      echo "${C_ECHO_YELLOW}…$C_ECHO_RESET:"
+    elif [ "$sync_status" = "synced" ]; then
       echo "${C_ECHO_GREEN}≡$C_ECHO_RESET:"
     else
       echo "${C_ECHO_RED}≠$C_ECHO_RESET:"
