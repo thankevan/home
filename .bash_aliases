@@ -57,7 +57,8 @@ alias vo='vim -o'
 if [ $ISMAC = 1 ]; then
   alias start=open
 elif [ $ISCYG = 1 ]; then
-  alias start="/cygdrive/c/Windows/explorer.exe /e, \`cygpath -w \"\$(pwd)\"\`"
+  alias start=cygstart
+#  alias start="/cygdrive/c/Windows/explorer.exe /e, \`cygpath -w \"\$(pwd)\"\`"
 else
   alias start=nautilus
 fi
