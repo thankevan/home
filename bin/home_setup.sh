@@ -64,7 +64,7 @@ function setup_ssh_key {
       exit 1
     fi
     echo "Email: $EMAIL2"
-    ssh-keygen -t rsa -b 4096 -C "$EMAIL2" -f ~/.ssh/id_rsa_personal.pub
+    ssh-keygen -t rsa -b 4096 -C "$EMAIL2" -f ~/.ssh/id_rsa_personal
 
     echo "# Default github account" >> ~/.ssh/config
     echo "Host github.com" >> /.ssh/config
