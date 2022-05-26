@@ -45,6 +45,10 @@ set scrolloff=5
 " Turn on syntax highlighting.
 syntax on
 
+" Syntax highlighting for really long lines & files
+" set synmaxcol=0
+" syntax sync minlines=10000
+
 " Incremental search.
 set incsearch
 
