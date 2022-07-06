@@ -90,6 +90,20 @@ nnoremap # #zz
 "
 " To prevent converting tabs to spaces:
 " set noexpandtab
+"
+" You can do %retab! after the above to fix spaces but it will also 'fix'
+" spaces in the middle of a line.
+" Use this regex instead: %s#\v(^(\t*|(  )*))@<=  #\t#gc
+" %s       = substitute on all lines
+" #        = use # instead of / for readability
+" \v       = use very magic mode - less escapes needed
+" (^       = start group and start at beginning of line
+" (\t*     = start group and match any number of tabs (at the start of line)
+" |(  )*   = OR match groups of two spaces
+" ))       = close previous groups
+" @<=      = positive lookbehind (must exist but won't be included in the 'match')
+" '  #\t#' = replace two spaces with tab
+" gc i     = global (multiple matches per line) & confirm
 
 " Turn on indenting.
 set autoindent
@@ -201,3 +215,16 @@ function! SetupStatusLine()
 endfunction
 call SetupStatusLine()
 
+""""""""""""""""""""
+"  LOCAL OVERRIDES "
+""""""""""""""""""""
+
+if filereadable(".vimscript_file")
+  so .vimscript_file
+
+"  The following command might be too verbose, you can just run this to check
+"  tabs/spaces formatting and where the settings came from:
+"  verbose set ts? et?
+"
+"  au BufReadPost,BufNewFile *.* verbose set ts? et?
+endif
