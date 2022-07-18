@@ -1,0 +1,38 @@
+https://stackoverflow.com/a/6217314
+
+git rebase -i will do it.
+
+First, start with a clean working directory: git status should show no pending modifications, deletions, or additions.
+
+Now, you have to decide which commit(s) you want to split.
+
+A) Splitting the most recent commit
+To split apart your most recent commit, first:
+
+$ git reset HEAD~
+Now commit the pieces individually in the usual way, producing as many commits as you need.
+
+B) Splitting a commit farther back
+This requires rebasing, that is, rewriting history. To specify the correct commit, you have several choices:
+
+If it is three commits back, then
+
+  $ git rebase -i HEAD~3
+where 3 is how many commits back it is.
+
+If it is farther back in the tree than you want to count, then
+
+  $ git rebase -i 123abcd~
+where 123abcd is the SHA1 of the commit you want to split up.
+
+If you are on a different branch (e.g., a feature branch) that you want to merge into master:
+
+  $ git rebase -i master
+When you get the rebase edit screen, find the commit you want to break apart. At the beginning of that line, replace pick with edit (e for short). Save the buffer and exit. Rebase will now stop just after the commit you want to edit. Then:
+
+$ git reset HEAD~
+Commit the pieces individually in the usual way, producing as many commits as you need.
+
+Finally
+
+$ git rebase --continue

@@ -1,0 +1,13 @@
+#rename local
+git branch -m <oldname> <newname>
+#OR
+git branch -m <newname>
+
+#push local branch to remote
+git push origin -u <newname>
+
+#delete old remote branch
+git push origin --delete <oldname>
+
+#unset remote
+git branch --unset-upstream <new_name>
