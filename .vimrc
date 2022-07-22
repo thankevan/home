@@ -219,8 +219,10 @@ call SetupStatusLine()
 "  LOCAL OVERRIDES "
 """"""""""""""""""""
 
-if filereadable(".vimscript_file")
-  so .vimscript_file
+" search upward to find the file
+let localvimscript=findfile('.vimscript_file', '.;')
+if filereadable(expand(localvimscript))
+  exec "source " . expand(localvimscript)
 
 "  The following command might be too verbose, you can just run this to check
 "  tabs/spaces formatting and where the settings came from:
