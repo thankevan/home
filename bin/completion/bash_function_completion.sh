@@ -15,8 +15,8 @@ _bash_function_completion()
     sed_cmd="gsed" # brew install gnu-sed
   fi
 
-  # get function names regardless of style: 'function foo {' or 'foo() {'
-  function_names=`$grep_cmd -oP 'function.*|.*\(\)' "$full_file" |$sed_cmd -E 's/(function\s+)|(\s+\{)|(\(.*)//g'`
+  # get function names of these styles: 'function foo {' or 'foo() {'
+  function_names=`$grep_cmd -oP 'function.*{$|.*\(\) *{$' "$full_file" |$sed_cmd -E 's/(function\s+)|(\s+\{)|(\(.*)//g'`
 
   COMPREPLY=($(compgen -W "$function_names" -- "${COMP_WORDS[$COMP_CWORD]}"))
 }
