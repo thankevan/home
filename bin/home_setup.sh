@@ -393,8 +393,8 @@ function set_colors {
   if [ "$ARE_COLORS_GOOD" == "y" ]; then
     echo "export COLORS_SET=1" >> .bash_precustom
   else
-    echo "Set blue: 1E90FF"
-    echo "Set bright/bold blue: 4444FF"
+    echo "Set blue: 1E90FF (30,144,255)"
+    echo "Set bright/bold blue: 4444FF (68,68,255)"
     read -p ""
   fi
 }
@@ -428,6 +428,9 @@ function check_for_powerline_fonts {
     echo ""
     echo "For Windows, Inconsolata (use partial smoothing in cygwin):"
     echo "https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Inconsolata"
+    echo ""
+    echo "Or patched Consolas"
+    echo "https://github.com/Znuff/consolas-powerline"
     echo ""
     echo "For Mac:"
     echo "In iTerm Preferences->Profiles->Text:Text Rendering check:"
