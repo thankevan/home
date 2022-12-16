@@ -215,6 +215,28 @@ function! SetupStatusLine()
 endfunction
 call SetupStatusLine()
 
+""""""""""""""""
+" Better Tilde "
+""""""""""""""""
+
+function! BetterTilde()
+  let l:let = getline('.')[col('.') - 1] "get the letter under the cursor
+
+  echo l:let
+
+  if l:let =~ '"'
+    silent exe "normal s'\<ESC>"
+  elseif l:let =~ "'"
+    silent exe "normal s\"\<ESC>"
+  else
+    nunmap ~
+    silent exec "normal ~\<left>"
+    nnoremap ~ :call BetterTilde()<CR>
+  endif
+
+endfunction
+nnoremap ~ :call BetterTilde()<CR>
+
 """"""""""""""""""""
 "  LOCAL OVERRIDES "
 """"""""""""""""""""
