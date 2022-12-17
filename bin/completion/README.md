@@ -1,5 +1,13 @@
+
+You can use ../fetch_latest_completions.sh to update
+
+***DO NOT PUT NON-COMPLETION SCRIPTS IN THIS DIR***  
+
 **git-completion.bash**  
 - https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
+
+**git-prompt.sh**  
+- https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh
 
 **docker-completion.sh**  
 - https://github.com/docker/docker-ce/blob/master/components/cli/contrib/completion/bash/docker
