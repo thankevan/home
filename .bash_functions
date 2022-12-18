@@ -50,10 +50,22 @@ function addcolumn() {
 }
 
 
+#############
+#  NETWORK  #
+#############
+
+function has_net_connection() {
+  if : 2>/dev/null >/dev/tcp/8.8.8.8/53; then
+    echo 'online'
+  else
+    echo 'offline'
+  fi
+}
+
+
 #########
 #  GIT  #
 #########
-
 
 function git_curbranch() {
   #git branch 2>/dev/null |grep '^\*'|awk '{print $2}'
@@ -71,6 +83,33 @@ function git_username() {
 function git_check_if_in_sync() {
   # from: https://stackoverflow.com/a/25109122
   [ $(git rev-parse HEAD) = $(git ls-remote $(git rev-parse --abbrev-ref @{u} | sed 's#/# #g') | cut -f1) ] && echo "synced" || echo "unsynced" 2>/dev/null
+}
+
+# taken from git-prompt.sh (see completions README.md)
+function git_check_sync_status() {
+  revcount="$(git rev-list --count --left-right "@{upstream}"...HEAD 2>/dev/null)"
+
+  case "$revcount" in
+    "") # no upstream
+      echo "><"
+      return
+      ;;
+    "0	0") # equal to upstream
+      echo "="
+      return
+      ;;
+    "0	"*) # ahead of upstream
+      echo ">"
+      return
+      ;;
+    *"	0") # behind upstream
+      echo "<"
+      return
+      ;;
+    *)	    # diverged from upstream
+      echo "<>"
+      ;;
+  esac
 }
 
 ####################
@@ -92,7 +131,7 @@ function ps1_myprompt() {
   prompt+="\$(ps1_getgitrepo)"                  # Bold Magenta: Git repo (trailing : existance base on the function).
   prompt+="\$(ps1_getgitbranch)"                # Magenta:      Git branch (trailing : existance base on the function).
 #  prompt+="\$(ps1_getgitsynced)"                # Red/Green:    Git synced (trailing : existance base on the function).
-  prompt+="\$(ps1_getgitsynced)"                # Red/Green:    Git synced (trailing : existance base on the function).
+  prompt+="\$(ps1_getgitsyncstatus)"            # Red/Green:    Git synced (trailing : existance base on the function).
   prompt+="$C_BOLD_MAGENTA\w"                   # Cyan:         Path
   prompt+="$ENV_PS_COLOR$(ps1_getwrap)"         # Env Color:    Prompt top line wrapper based on whether user is root.
   prompt+="\n"                                  #               Newline to give the path space without interfering.
@@ -150,22 +189,35 @@ function ps1_getgitsynced() {
   fi
 }
 
-# taken from git-prompt.sh (see completions README.md)
-function ps1_getgitdiff() {
-  case "$(git rev-list --count --left-right "@{upstream}"...HEAD 2>/dev/null)" in
-    "") # no upstream
+function ps1_getgitsyncstatus() {
+  if [ "$(has_net_connection)" = "offline" ]; then
+    echo "${C_ECHO_RED}-⌀-${C_ECHO_RESET}:"
+    return
+  fi
+
+  case "$(git_check_sync_status)" in
+    "><") # no upstream
+      if [ -n "$(git_curbranch)" ]; then
+        echo "${C_ECHO_YELLOW}l≯‽$C_ECHO_RESET:"
+      fi
+      return
       ;;
-    "0       0") # equal to upstream
-      echo "${C_ECHO_GREEN}≡$C_ECHO_RESET:"
+    "=") # equal to upstream
+      echo "${C_ECHO_GREEN}l≡r$C_ECHO_RESET:"
+      return
       ;;
-    "0       "*) # ahead of upstream
-      echo "${C_ECHO_YELLOW}>$C_ECHO_RESET:"
+    ">") # ahead of upstream
+      echo "${C_ECHO_YELLOW}l>r$C_ECHO_RESET:"
+      return
       ;;
-    *"       0") # behind upstream
-      echo "${C_ECHO_MAGENTA}<$C_ECHO_RESET:"
+    "<") # behind upstream
+      echo "${C_ECHO_MAGENTA}l<r$C_ECHO_RESET:"
+      return
       ;;
-    *)	    # diverged from upstream
-      echo "${C_ECHO_RED}≠$C_ECHO_RESET:"
+    "<>")	    # diverged from upstream
+      echo "${C_ECHO_RED}l≠r$C_ECHO_RESET:"
       ;;
   esac
+
 }
+
