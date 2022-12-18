@@ -92,7 +92,8 @@ function ps1_myprompt() {
   prompt+="\$(ps1_getgitrepo)"                  # Bold Magenta: Git repo (trailing : existance base on the function).
   prompt+="\$(ps1_getgitbranch)"                # Magenta:      Git branch (trailing : existance base on the function).
 #  prompt+="\$(ps1_getgitsynced)"                # Red/Green:    Git synced (trailing : existance base on the function).
-  prompt+="$C_BOLD_MAGENTA\w"                           # Cyan:         Path
+  prompt+="\$(ps1_getgitsynced)"                # Red/Green:    Git synced (trailing : existance base on the function).
+  prompt+="$C_BOLD_MAGENTA\w"                   # Cyan:         Path
   prompt+="$ENV_PS_COLOR$(ps1_getwrap)"         # Env Color:    Prompt top line wrapper based on whether user is root.
   prompt+="\n"                                  #               Newline to give the path space without interfering.
   prompt+="$(ps1_getpromptchar) "               # Red/Normal:   Final char and color based on whether the user is root.
@@ -149,3 +150,22 @@ function ps1_getgitsynced() {
   fi
 }
 
+# taken from git-prompt.sh (see completions README.md)
+function ps1_getgitdiff() {
+  case "$(git rev-list --count --left-right "@{upstream}"...HEAD 2>/dev/null)" in
+    "") # no upstream
+      ;;
+    "0       0") # equal to upstream
+      echo "${C_ECHO_GREEN}≡$C_ECHO_RESET:"
+      ;;
+    "0       "*) # ahead of upstream
+      echo "${C_ECHO_YELLOW}>$C_ECHO_RESET:"
+      ;;
+    *"       0") # behind upstream
+      echo "${C_ECHO_MAGENTA}<$C_ECHO_RESET:"
+      ;;
+    *)	    # diverged from upstream
+      echo "${C_ECHO_RED}≠$C_ECHO_RESET:"
+      ;;
+  esac
+}
