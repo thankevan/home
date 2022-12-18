@@ -67,6 +67,9 @@
 # options immediately following their corresponding long form.
 # This order should be applied to lists, alternatives and code blocks.
 
+
+type docker 2>/dev/null || return
+
 __docker_previous_extglob_setting=$(shopt -p extglob)
 shopt -s extglob
 
