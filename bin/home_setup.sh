@@ -309,18 +309,25 @@ function mac_setup {
   echo "DO MAC SETUP"
   echo "------------"
 
-  mac_do_defaults_writes
+  mac_write_defaults
   mac_install_homebrew
   mac_install_commands_via_brew
   mac_default_to_bash
 }
 
-function mac_do_defaults_writes {
-  echo "DO DEFAULTS WRITES"
+function mac_write_defaults {
+  echo ""
+  echo "MAC WRITE DEFAULTS"
+  echo "------------------"
+
+  echo "defaults write..."
 
   # turn on file extensions in the finder
   echo "Show file extensions"
   defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+  echo "Turn on traditional scroll direciton (after logging back in)"
+  defaults write -g com.apple.swipescrolldirection -bool FALSE
 
   killall Finder
 }
