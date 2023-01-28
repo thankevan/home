@@ -18,7 +18,7 @@ alias cd.="cd -P .."
 alias mkdir="mkdir -p"
 
 # Add some ls coloring.
-if [ $ISMAC == 1 ]; then
+if [ $ISMAC = 1 ]; then
   export lscolor="-G"
 else
   export lscolor="--color='auto'"
@@ -59,8 +59,14 @@ if [ $ISMAC = 1 ]; then
 elif [ $ISCYG = 1 ]; then
   alias start=cygstart
 #  alias start="/cygdrive/c/Windows/explorer.exe /e, \`cygpath -w \"\$(pwd)\"\`"
+elif [ $ISWSL = 1 ]; then
+  alias start="explorer.exe"
 else
   alias start=nautilus
+fi
+
+if [ $ISMAC != 1 ]; then
+  alias open=start
 fi
 
 
