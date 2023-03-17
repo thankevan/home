@@ -6,7 +6,7 @@ LEGEND
 C- Control + next char
 M- Meta + next char
 , separates 2 potential commands
-ESC x Gets treated as M-x
+ESC x Gets treated as M-x, some terminals can set this to the alt key
 
 
 MOVEMENT
@@ -107,4 +107,6 @@ M-#: Value of the readline comment-begin variable is inserted at the beginning o
 M-g: Expand as path
 C-x *: List possible path expansions
 
-MARK 
+> bind -p # to get the built in current list
+
+MARK
