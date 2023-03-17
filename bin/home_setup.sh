@@ -293,11 +293,13 @@ function setup_git_global_configs {
   git config --global user.name "$GITHUB_GLOBAL_USER"
   git config --global user.email "$GITHUB_GLOBAL_EMAIL"
 
-  # change how push works to automatically set upstream (needs >git push -u on the first push)
-  git config --global push.default current
+  if [ -f "$HOME/bin/git_setup_aliases.sh"]; then
+    $HOME/bin/git_setup_aliases.sh
+  fi
 
-  # git makes you set up what your pull strategy is now, opting for rebase
-  git config --global pull.rebase true
+  if [ -f "$HOME/bin/git_setup_configs.sh"]; then
+    $HOME/bin/git_setup_configs.sh
+  fi
 }
 
 function mac_setup {
