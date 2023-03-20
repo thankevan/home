@@ -369,6 +369,8 @@ function mac_install_commands_via_brew {
     "--cask rectangle" \
     "--cask iterm2" \
     "--cask cameracontroller" \
+    jq \
+    qrencode \
     wget; do
 
     brew list $cmd || brew install $cmd
@@ -382,6 +384,34 @@ function mac_default_to_bash {
   echo "-------------------"
 
   chsh -s /bin/bash
+}
+
+function apt_setup {
+  if [ "$ISMAC" = "1" ]; then
+    return 0
+  fi
+
+  if ! command -v apt-get &> /dev/null; then
+    return 0
+  fi
+
+  echo ""
+  echo "DO APT SETUP"
+  echo "------------"
+
+  apt_install_commands
+}
+
+function apt_install_commands {
+  for cmd in \
+    bash-completion \
+    tmux \
+    jq \
+    qrencode \
+    wget; do
+
+    dpkg -l $cmd &>/dev/null || sudo apt-get install -qq $cmd
+  done
 }
 
 function set_colors {
@@ -456,6 +486,7 @@ function check_for_powerline_fonts {
 function run_all {
   check_if_home_directory
   mac_setup
+  apt_setup
   setup_ssh_key
   instruct_ssh_key_to_github
   backup_bash_files
