@@ -9,10 +9,10 @@
 # clear each alias first so you can replay
 
 git config --global --unset alias.p
-git config --global alias.p "push -u --force-with-lease"
+git config --global alias.p "push -u"
 
-git config --global --unset alias.fp
-git config --global alias.fp "push --force-with-lease"
+git config --global --unset alias.pf
+git config --global alias.pf "push --force-with-lease"
 
 git config --global --unset alias.ri
 git config --global alias.ri "rebase -i"
@@ -69,4 +69,9 @@ git config --global alias.showother "!show_file_from_branch() { git show \$1:\$2
 # call external apps
 git config --global --unset alias.dup
 git config --global alias.dup "!docker compose up"
+
+
+# diff branch to branching point (diff to origin)
+git config --global --unset alias.do
+git config --global alias.showother "!show_file_from_branch() { git show \$1:\$2; }; show_file_from_branch"
 

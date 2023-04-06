@@ -90,10 +90,11 @@ nnoremap # #zz
 "
 " To prevent converting tabs to spaces:
 " set noexpandtab
-"
+
+" Convert spaces to tabs
 " You can do %retab! after the above to fix spaces but it will also 'fix'
 " spaces in the middle of a line.
-" Use this regex instead: %s#\v(^(\t*|(  )*))@<=  #\t#gc
+" Use this regex instead:                %s#\v(^(\t*|(  )*))@<=  #\t#gc
 " %s       = substitute on all lines
 " #        = use # instead of / for readability
 " \v       = use very magic mode - less escapes needed
@@ -103,7 +104,7 @@ nnoremap # #zz
 " ))       = close previous groups
 " @<=      = positive lookbehind (must exist but won't be included in the 'match')
 " '  #\t#' = replace two spaces with tab
-" gc i     = global (multiple matches per line) & confirm
+" gc       = global (multiple matches per line) & confirm
 
 " Turn on indenting.
 set autoindent
@@ -228,6 +229,10 @@ function! BetterTilde()
     silent exe "normal s'\<ESC>"
   elseif l:let =~ "'"
     silent exe "normal s\"\<ESC>"
+  elseif l:let =~ "-"
+    silent exe "normal s\_\<ESC>"
+  elseif l:let =~ "_"
+    silent exe "normal s\-\<ESC>"
   else
     nunmap ~
     silent exec "normal ~\<left>"
