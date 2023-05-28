@@ -76,6 +76,7 @@ if [[ $(uname -r) = *icrosoft* ]]; then
   export ISWSL=1
 fi
 
+
 #############
 #  HISTORY  #
 #############
@@ -289,6 +290,8 @@ fi
 if [ $ISMAC = 1 ]; then
   if [ -f "/usr/local/etc/profile.d/bash_completion.sh" ]; then
     . "/usr/local/etc/profile.d/bash_completion.sh"
+  elif [ -f "/opt/homebrew/etc/profile.d/bash_completion.sh" ]; then
+    . "/opt/homebrew/etc/profile.d/bash_completion.sh"
   else
     echo "You may need to: brew install bash-completion"
   fi
@@ -300,6 +303,7 @@ fi
 
 BASH_FUNCTION_COMPLETION_FILES+=("home_setup.sh")
 export BASH_FUNCTION_COMPLETION_FILES
+
 
 #########################
 #  SOURCE MY DOT FILES  #
@@ -333,6 +337,7 @@ if [ -f "$BASHRC_DIR/.bash_custom" ]; then
   source "$BASHRC_DIR/.bash_custom"
 fi
 
+
 ##############################
 #  CUSTOM COMPLETION SCRIPTS #
 ##############################
@@ -351,5 +356,4 @@ do
     source "$f"
   fi
 done
-
 

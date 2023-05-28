@@ -234,6 +234,9 @@ function setup_custom_dot_files {
   # mac
   if [ $ISMAC = 1 ]; then
     echo "export BASH_SILENCE_DEPRECATION_WARNING=1" >> .bash_precustom
+
+    echo '[[ -r "/opt/homebrew/bin" ]] && export PATH=/opt/homebrew/bin:$PATH' >> .bash_precustom
+    echo '[[ -r "/opt/homebrew/sbin" ]] && export PATH=/opt/homebrew/sbin:$PATH' >> .bash_precustom
   fi
 
   # personal github user
