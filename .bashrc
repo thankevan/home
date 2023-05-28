@@ -15,7 +15,8 @@ BASHRC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 # export CODE_ENV=DEV|TEST|PROD  - Manually sets the environment.
 
 ###### .PRECUSTOM SCREEN OPTIONS ######
-# export NOSCREEN=1     - Prevents screen.
+# export USESCREEN=1    - Activate screen.
+# export USETMUX=1      - Activate tmux.
 # export SYSSCREENRC=x  - Overrides .screenrc with x.
 
 ###### .PRECUSTOM BASHRC OPTIONS ######
@@ -211,30 +212,30 @@ fi
 ############
 
 # Do some checks to see if screen should not be used.
-# NOSCREEN can also be set to 1 previous to this if you want to force not using screen.
+# USESCREEN can also be set to 0 previous to this if you want to force not using screen.
 
 # screen not installed
 if [ -z "$(command -v screen)" ]; then
-  export NOSCREEN=1
+  export USESCREEN=0
 fi
 
 # am I already in screen?
 if [ -n "$STY" ]; then
-  export NOSCREEN=1
+  export USESCREEN=0
 fi
 
 # no screen if I logged in directly as root
 if [ "$USER" == 'root' ] && [ "$(logname 2>/dev/null)" != 'root' ]; then
-  export NOSCREEN=1
+  export USESCREEN=0
 fi
 
 # no screen if there's no config
 if [ ! -f "$BASHRC_DIR/.screenrc" ]; then
-  export NOSCREEN=1
+  export USESCREEN=0
 fi
 
 # Reattach to screen if there is one available or create new session
-if [ "$NOSCREEN" != 1 ]; then
+if [ "$USESCREEN" = 1 ]; then
   screen -RR
 fi
 
@@ -244,30 +245,30 @@ fi
 ##########
 
 # Do some checks to see if tmux should not be used.
-# NOTMUX can also be set to 1 previous to this if you want to force not using tmux.
+# USETMUX can also be set to 0 previous to this if you want to force not using tmux.
 
 # tmux not installed
 if [ -z "$(command -v tmux)" ]; then
-  export NOTMUX=1
+  export USETMUX=0
 fi
 
 # am I already in tmux?
 if [ -n "$TMUX" ]; then
-  export NOTMUX=1
+  export USETMUX=0
 fi
 
 # no tmux if I logged in directly as root
 if [ "$USER" == 'root' ] && [ "$(logname 2>/dev/null)" != 'root' ]; then
-  export NOTMUX=1
+  export USETMUX=0
 fi
 
 # no tmux if there's no config
 if [ ! -f "$BASHRC_DIR/.tmux.conf" ]; then
-  export NOTMUX=1
+  export USETMUX=1
 fi
 
 # Reattach to tmux if there is one available or create new session
-if [ "$NOTMUX" != 1 ]; then
+if [ "$USETMUX" = 1 ]; then
   tmux_attach_flag=$(tmux ls 2>/dev/null | grep -qv 'attached)$' && echo "attach -d")
   tmux $tmux_attach_flag
 fi

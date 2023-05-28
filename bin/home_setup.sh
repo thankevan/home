@@ -220,15 +220,15 @@ function setup_custom_dot_files {
   echo "export CODE_ENV=$ENV_LEVEL" >> .bash_precustom
 
   # screen
-  read -p 'Skip screen? (1|<enter to not skip>): ' SKIP_SCREEN
-  if [ "$SKIP_SCREEN" = "1" ]; then
-    echo "export NOSCREEN=$SKIP_SCREEN" >> .bash_precustom
+  read -p 'Use screen? (0|<enter to leave off>): ' USE_SCREEN
+  if [ "$USE_SCREEN" = "1" ]; then
+    echo "export USESCREEN=$USE_SCREEN" >> .bash_precustom
   fi
 
   # tmux
-  read -p 'Skip tmux? (1|<enter to not skip>): ' SKIP_TMUX
-  if [ "$SKIP_TMUX" = "1" ]; then
-    echo "export NOTMUX=$SKIP_TMUX" >> .bash_precustom
+  read -p 'Use tmux? (1|<enter to leave off>): ' USE_TMUX
+  if [ "$USE_TMUX" = "1" ]; then
+    echo "export USETMUX=$USE_TMUX" >> .bash_precustom
   fi
 
   # mac
