@@ -59,7 +59,7 @@ git config --global alias.gr "log --graph --abbrev-commit --decorate --format=fo
 
 # count commits, default to current branch
 git config --global --unset alias.cc
-git config --global alias.cc "!count_commits() { local curbranch=`git rev-parse --abbrev-ref HEAD`;git rev-list --count \${1:-\$curbranch}; }; count_commits"
+git config --global alias.cc "!count_commits() { local curbranch=\`git rev-parse --abbrev-ref HEAD\`;git rev-list --count \${1:-\$curbranch}; }; count_commits"
 
 # show file in from other branch
 git config --global --unset alias.showother
