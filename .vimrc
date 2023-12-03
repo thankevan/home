@@ -242,6 +242,16 @@ function! BetterTilde()
 endfunction
 nnoremap ~ :call BetterTilde()<CR>
 
+""""""""""""""""""""""
+"  PERSONAL HELPFILE "
+""""""""""""""""""""""
+
+" Use typing:  `:help myhelp`  OR  `:help myhelp-diff`
+
+" retag my personal help file
+helpt ~/.vim/pack/personal/start/myhelp/doc/
+
+
 """"""""""""""""""""
 "  LOCAL OVERRIDES "
 """"""""""""""""""""

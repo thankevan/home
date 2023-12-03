@@ -1,0 +1,52 @@
+*myhelp.txt*	For Vim version 9.0	Last change: 2023 December 2
+*myhelp*
+
+My cheetsheet
+
+===============================================================================
+CONTENTS
+
+    1. Normal Mode.......................................|myhelp-normal|
+    2. Visual Mode.......................................|myhelp-visual|
+    3. Insert Mode.......................................|myhelp-insert|
+    4. Diff Mode.........................................|myhelp-diff|
+    5. Help Files........................................|myhelp-help|
+
+===============================================================================
+1. Normal Mode                                         *myhelp-normal*
+
+===============================================================================
+2. Visual Mode                                         *myhelp-visual*
+
+===============================================================================
+3. Insert Mode                                         *myhelp-insert*
+
+===============================================================================
+4. Diff Mode                                           *myhelp-diff*
+
+]c :        - next difference
+[c :        - previous difference
+do          - diff obtain
+dp          - diff put
+zo          - open folded text
+zc          - close folded text
+:diffupdate - re-scan the files for differences
+
+===============================================================================
+5. Help Files                                          *myhelp-help*
+
+To rebuild the tag file: >
+	:helpt /path/to/this/directory
+	:helpt ~/.vim/pack/personal/start/myhelp/doc
+<
+
+To open help: >
+  :help myhelp
+  :help myhelp-diff
+<
+
+See:
+https://web.archive.org/web/20171103010721/http://technosophos.com/2014/10/09/create-built-in-Vim-cheatsheet.html
+https://tinyheero.github.io/2017/11/04/vim-cheatsheet.html
+https://opensource.com/article/20/2/how-install-vim-plugins
+
