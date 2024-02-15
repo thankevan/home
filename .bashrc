@@ -264,7 +264,7 @@ fi
 
 # no tmux if there's no config
 if [ ! -f "$BASHRC_DIR/.tmux.conf" ]; then
-  export USETMUX=1
+  export USETMUX=0
 fi
 
 # Reattach to tmux if there is one available or create new session
