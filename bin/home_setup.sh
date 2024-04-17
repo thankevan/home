@@ -3,6 +3,11 @@
 BASH_BACKUP_DIR="bash_bak"
 EMAIL=""
 
+GIT_STANDARD_SSH_HOST="github.com"
+GIT_STANDARD_SSH_ADDRESS="git@$GIT_STANDARD_SSH_HOST"
+GIT_PERSONAL_SSH_HOST="github-personal"
+GIT_PERSONAL_SSH_ADDRESS="git@$GIT_PERSONAL_SSH_HOST"
+
 ISBSD=0
 ISMAC=0
 ISCYG=0
@@ -67,16 +72,16 @@ function setup_ssh_key {
     ssh-keygen -t rsa -b 4096 -C "$EMAIL2" -f ~/.ssh/id_rsa_personal
 
     echo "# Default github account" >> ~/.ssh/config
-    echo "Host github.com" >> /.ssh/config
-    echo "   HostName github.com" >> /.ssh/config
-    echo "   IdentityFile ~/.ssh/id_rsa" >> /.ssh/config
-    echo "   IdentitiesOnly yes" >> /.ssh/config
-    echo "" >> /.ssh/config
-    echo "# Personal github account" >> /.ssh/config
-    echo "Host github-personal" >> /.ssh/config
-    echo "   HostName github.com" >> /.ssh/config
-    echo "   IdentityFile ~/.ssh/id_rsa_pesonal" >> /.ssh/config
-    echo "   IdentitiesOnly yes" >> /.ssh/config
+    echo "Host $GIT_STANDARD_SSH_HOST" >> ~/.ssh/config
+    echo "   HostName github.com" >> ~/.ssh/config
+    echo "   IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
+    echo "   IdentitiesOnly yes" >> ~/.ssh/config
+    echo "" >> ~/.ssh/config
+    echo "# Personal github account" >> ~/.ssh/config
+    echo "Host $GIT_PERSONAL_SSH_HOST" >> ~/.ssh/config
+    echo "   HostName github.com" >> ~/.ssh/config
+    echo "   IdentityFile ~/.ssh/id_rsa_personal" >> ~/.ssh/config
+    echo "   IdentitiesOnly yes" >> ~/.ssh/config
   fi
 }
 
@@ -125,7 +130,9 @@ function instruct_ssh_key_to_github {
   read -p "ssh key copied to clipboard, add to github, then hit enter"
 
   if [ -e ~/.ssh/id_rsa_personal.pub ]; then
+    echo "Copying personal sshkey..."
     open_url_in_browser "$GITHUB_SETTINGS_URL"
+    read -p "Open that url to your personal github account..."
     copy_file_to_clipboard "$HOME/.ssh/id_rsa_personal.pub"
     read -p "personal ssh key copied to clipboard, add to github, then hit enter"
   fi
@@ -168,6 +175,7 @@ function backup_bash_files {
 
   if [ ! -f "$BASH_BACKUP_DIR/.profile" ]; then
     echo "ERROR: $BASH_BACKUP_DIR/.profile not found, backup existing files"
+    echo "If on a mac and everything is fine because it defaults to zsh, do: touch .profile >~/$BASH_BAKCUP_DIR"
     exit 1
   fi
 }
@@ -182,9 +190,15 @@ function clone_home {
     return 0
   fi
 
-  read -p 'Github home repo clone link: ' GITHUB_HOME_REPO
+  read -p 'Github home repo clone link (will autofix to personal if needed): ' GITHUB_HOME_REPO
   read -p 'Home github user.name: ' GITHUB_HOME_USER
   read -p 'Home github user.email: ' GITHUB_HOME_EMAIL
+
+  # -q (quiet) to suppress regular output
+  # -s (silent) to suppress errors
+  if grep -qs github-personal "$HOME/.ssh/config"; then
+    GITHUB_HOME_REPO="${GITHUB_HOME_REPO/$GIT_STANDARD_SSH_ADDRESS/$GIT_PERSONAL_SSH_ADDRESS}"
+  fi
 
   git init
   git remote add origin "$GITHUB_HOME_REPO"
@@ -235,8 +249,7 @@ function setup_custom_dot_files {
   if [ $ISMAC = 1 ]; then
     echo "export BASH_SILENCE_DEPRECATION_WARNING=1" >> .bash_precustom
 
-    echo '[[ -r "/opt/homebrew/bin" ]] && export PATH=/opt/homebrew/bin:$PATH' >> .bash_precustom
-    echo '[[ -r "/opt/homebrew/sbin" ]] && export PATH=/opt/homebrew/sbin:$PATH' >> .bash_precustom
+    echo '[[ -r "/opt/homebrew/bin" ]] && eval "$(/opt/homebrew/bin/brew shellenv)"' >> .bash_precustom
   fi
 
   # personal github user
@@ -296,11 +309,11 @@ function setup_git_global_configs {
   git config --global user.name "$GITHUB_GLOBAL_USER"
   git config --global user.email "$GITHUB_GLOBAL_EMAIL"
 
-  if [ -f "$HOME/bin/git_setup_aliases.sh"]; then
+  if [ -f "$HOME/bin/git_setup_aliases.sh" ]; then
     $HOME/bin/git_setup_aliases.sh
   fi
 
-  if [ -f "$HOME/bin/git_setup_configs.sh"]; then
+  if [ -f "$HOME/bin/git_setup_configs.sh" ]; then
     $HOME/bin/git_setup_configs.sh
   fi
 }
@@ -342,9 +355,21 @@ function mac_install_homebrew {
   echo "MAC INSTALL HOMEBREW"
   echo "--------------------"
 
-  if [ -n "$(command -v brew)" ]; then
-    echo "homebrew already installed"
-    return 0
+  if [ -e "/opt/homebrew/bin/brew" ]; then
+    echo "homebrew installation detected"
+
+    if [ -n "$(command -v brew)" ]; then
+      echo "homebrew is a callable command"
+      return 0
+    fi
+
+    echo "homebrew command not detected, running: eval \"\$(/opt/homebrew/bin/brew shellenv)\""
+    [[ -r "/opt/homebrew/bin" ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+
+    if ! [ -n "$(command -v brew)" ]; then
+      echo "homebrew is still not a callable command, please address the issue"
+      exit 1
+    fi
   fi
 
   echo "Installing brew... see: https://brew.sh/"
@@ -362,16 +387,15 @@ function mac_install_commands_via_brew {
   fi
 
   # This is for cameracontroller to fix webcam issues
-  brew tap | grep cask-drivers || brew tap homebrew/cask-drivers
 
   for cmd in \
     bash-completion \
     tmux \
     gnu-sed \
     grep \
-    "--cask rectangle" \
-    "--cask iterm2" \
-    "--cask cameracontroller" \
+    rectangle \
+    iterm2 \
+    cameracontroller \
     jq \
     qrencode \
     wget; do
@@ -385,6 +409,11 @@ function mac_default_to_bash {
   echo ""
   echo "MAC DEFAULT TO BASH"
   echo "-------------------"
+
+  if [ "$SHELL" = "/bin/bash" ]; then
+    echo "bash already set"
+    return 0
+  fi
 
   chsh -s /bin/bash
 }
