@@ -331,6 +331,7 @@ function mac_setup {
   mac_install_homebrew
   mac_install_commands_via_brew
   mac_default_to_bash
+  mac_create_dock_aliases
 }
 
 function mac_write_defaults {
@@ -416,6 +417,25 @@ function mac_default_to_bash {
   fi
 
   chsh -s /bin/bash
+}
+
+function mac_create_dock_aliases {
+  echo ""
+  echo "MAC CREATE DOCK ALIASES"
+  echo "-----------------------"
+
+  if [ -e "$HOME/Documents/Aliases/Downloads" ]; then
+    echo "Aliases already created"
+    return 0
+  fi
+
+  mkdir -p Documents/Aliases
+
+  ln -s /Applications/ Documents/Aliases/Applications
+  ln -s "$HOME/Downloads/" Documents/Aliases/Downloads
+
+  open Documents/Aliases
+  read -p "Add those links to your dock"
 }
 
 function apt_setup {
