@@ -72,6 +72,10 @@ function git_curbranch() {
   git rev-parse --abbrev-ref HEAD 2>/dev/null
 }
 
+function git_curtag() {
+  git tag --points-at HEAD 2>/dev/null
+}
+
 function git_repo() {
   basename -s ".git" `git config --get remote.origin.url` 2>/dev/null
 }
@@ -165,6 +169,21 @@ function ps1_getpromptchar() {
 
 function ps1_getgitbranch() {
   local branch=`git_curbranch`
+  local tag=`git_curtag`
+  if [ -n "$tag" ]; then
+    tag=">$tag"
+  fi
+
+  if [ "$branch" = "HEAD" ]; then
+    if [ -n "$tag" ]; then
+      echo "$C_ECHO_BOLD_GREEN$tag$C_ECHO_RESET:"
+      return
+    fi
+
+    echo "$C_ECHO_BOLD_YELLOW$branch$C_ECHO_RESET:"
+    return
+  fi
+
   if [ -n "$branch" ]; then
     echo "$C_ECHO_MAGENTA$branch$C_ECHO_RESET:"
   fi
