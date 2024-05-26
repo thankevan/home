@@ -8,12 +8,17 @@ function help() {
   echo "-m/--messages         Output commit messages only"
   echo "-o/--one-line         Output commits as one line: <commit> <title>"
   echo "-b/--branch <branch>  Specify the branch to diff from directly rather than interactively"
+  echo "-a/--all-at-once      Turn off paging"
+  echo "-c/--color            Use color formatting"
 }
 
 BRANCH=""
 SHAS_ONLY=0
 MESSAGES_ONLY=0
 ONE_LINE=0
+COLOR=0
+ALL_AT_ONCE=0
+paging=""
 ASCENDING_OPT="--reverse"
 
 while [ -n "$1" ]; do
@@ -44,10 +49,21 @@ while [ -n "$1" ]; do
       ONE_LINE=1
       ;;
 
-    # list functions you can call
+    # show commits since this specified branch
     -b|--branch)
       shift
       BRANCH="$1"
+      ;;
+
+    # use color formatting
+    -c|--color)
+      COLOR=1
+      ;;
+
+    # all at once (no paging)
+    -a|--all-at-once)
+      ALL_AT_ONCE=1
+      paging="--no-pager"
       ;;
 
     # bad flag
@@ -68,13 +84,24 @@ if [ -z "$BRANCH" ]; then
   fi
 fi
 
-if [ "$SHAS_ONLY" == "1" ]; then
-  git log $ASCENDING_OPT ${BRANCH}.. --pretty=format:%h
-elif [ "$MESSAGES_ONLY" == "1" ]; then
-  git log $ASCENDING_OPT ${BRANCH}.. --pretty=format:%s
-elif [ "$ONE_LINE" == "1" ]; then
-  git log $ASCENDING_OPT ${BRANCH}.. --pretty=format:"%h %s"
-else
-  git log $ASCENDING_OPT ${BRANCH}..
+sha="%h"
+message="%s"
+
+if [ "1" = "$COLOR" ]; then
+  sha="%C(brightcyan)$sha%C(reset)"
+  message="%C(brightmagenta)$message%C(reset)"
 fi
 
+if [ "$SHAS_ONLY" == "1" ]; then
+  git $paging log $ASCENDING_OPT ${BRANCH}.. --pretty=format:"$sha"
+elif [ "$MESSAGES_ONLY" == "1" ]; then
+  git $paging log $ASCENDING_OPT ${BRANCH}.. --pretty=format:"$message"
+elif [ "$ONE_LINE" == "1" ]; then
+  git $paging log $ASCENDING_OPT ${BRANCH}.. --pretty=format:"$sha $message"
+else
+  git $paging log $ASCENDING_OPT ${BRANCH}..
+fi
+
+if [ "1" = "$ALL_AT_ONCE" ]; then
+  echo
+fi
