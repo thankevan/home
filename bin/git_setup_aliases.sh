@@ -8,6 +8,9 @@
 
 # clear each alias first so you can replay
 
+git config --global --unset alias.praise
+git config --global alias.praise "blame"
+
 git config --global --unset alias.p
 git config --global alias.p "push -u"
 
