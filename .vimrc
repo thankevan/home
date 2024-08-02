@@ -25,6 +25,10 @@ autocmd BufRead,BufNew,BufNewFile .bash*    set filetype=sh
 autocmd BufRead,BufNew,BufNewFile .screenrc set filetype=sh
 autocmd BufRead,BufNew,BufNewFile .inputrc  set filetype=sh
 
+" typescript fixes
+au BufNewFile,BufRead *.tsx,*.jsx set filetype=typescript.typescriptreact
+autocmd BufRead,BufNew * if (&ft == 'typescript' || &ft == 'typescript.typescriptreact') | set re=0 | endif
+
 """"""""""""""""
 " LINE OPTIONS "
 """"""""""""""""
@@ -139,7 +143,7 @@ set foldcolumn=0
 autocmd BufLeave * if (&fen == 0) | set foldcolumn=0 | endif
 
 " Set how whitespace and other chars are displayed when you use `set list!`
-set listchars=eol:¬,tab:>_,trail:~,extends:>,precedes:<,space:·
+"set listchars=eol:¬,tab:>_,trail:~,extends:>,precedes:<,space:·
 
 " Highlight trailing whitespace in red
 highlight ExtraWhitespace ctermbg=red guibg=red
