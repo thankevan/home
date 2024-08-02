@@ -399,6 +399,7 @@ function mac_install_commands_via_brew {
     cameracontroller \
     jq \
     qrencode \
+    1password-cli \
     wget; do
 
     brew list $cmd || brew install $cmd
