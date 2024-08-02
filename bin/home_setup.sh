@@ -399,6 +399,7 @@ function mac_install_commands_via_brew {
     cameracontroller \
     jq \
     qrencode \
+    hammerspoon \
     1password-cli \
     wget; do
 
