@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# this fails if it goes to root
 find_upward() {
   local filename="$1"
   local path=$(pwd)
@@ -8,11 +9,11 @@ find_upward() {
   while [[ "$path" != "" && ! -e "$path/$filename" ]]; do
     path=${path%/*}
   done
- 
+
   # empty path var == file not found
   if [ -z "$path" ]; then
     echo ""
-    return 1 # 404 - too big
+    return 1
   fi
 
   echo "$path/$filename"
