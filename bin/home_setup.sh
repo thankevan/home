@@ -167,6 +167,8 @@ function backup_bash_files {
       echo "Copying $file to $BASH_BACKUP_DIR (no clobber)"
       if [[ $ISMAC = 1 ]]; then
         cp -n "$file" "$BASH_BACKUP_DIR/"
+      elif [[ $ISWSL = 1 ]]; then
+        cp --update=none "$file" "$BASH_BACKUP_DIR/"
       else
         cp --no-clobber "$file" "$BASH_BACKUP_DIR/"
       fi
