@@ -51,13 +51,13 @@ fi
 for sha in `git_show_commits.sh $OPTIONS`; do
   message=`git log -n1 --pretty=format:%s $sha`
 
-	yes_no_response="-"
-	until [ "$yes_no_response" = "y" ] || [ "$yes_no_response" = "n" ]; do
-		read -p "Show diff for $C_ECHO_BOLD_CYAN${sha} $C_ECHO_BOLD_MAGENTA${message}$C_ECHO_RESET ([y]/n)?" yes_no_response
+  yes_no_response="-"
+  until [ "$yes_no_response" = "y" ] || [ "$yes_no_response" = "n" ]; do
+    read -p "Show diff for $C_ECHO_BOLD_CYAN${sha} $C_ECHO_BOLD_MAGENTA${message}$C_ECHO_RESET ([y]/n)?" yes_no_response
     if [ -z "$yes_no_response" ]; then
       yes_no_response="y"
     fi
-	done
+  done
 
   if [ "y" = "$yes_no_response" ]; then
     git show "$sha"
