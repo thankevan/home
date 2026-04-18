@@ -403,6 +403,7 @@ function mac_install_commands_via_brew {
     qrencode \
     hammerspoon \
     1password-cli \
+    gh \
     wget; do
 
     brew list $cmd || brew install $cmd
