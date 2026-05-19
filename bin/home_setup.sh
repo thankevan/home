@@ -48,8 +48,8 @@ function setup_ssh_key {
   echo "SETUP SSH KEY"
   echo "-------------"
 
-  if [ -e ".ssh/id_rsa.pub" ]; then
-    echo "ssh key already exists at: .ssh/id_rsa.pub"
+  if [ -e ".ssh/id_ed25519.pub" ]; then
+    echo "ssh key already exists at: .ssh/id_ed25519.pub"
     return 0
   fi
 
@@ -59,7 +59,7 @@ function setup_ssh_key {
     exit 1
   fi
   echo "Email: $EMAIL"
-  ssh-keygen -t rsa -b 4096 -C "$EMAIL"
+  ssh-keygen -t ed25519 -b 4096 -C "$EMAIL"
 
   read -p 'Setup a second personal ssh-key? (y/n): ' SECONDSSH
   if [ "$SECONDSSH" == "y" ]; then
@@ -69,18 +69,18 @@ function setup_ssh_key {
       exit 1
     fi
     echo "Email: $EMAIL2"
-    ssh-keygen -t rsa -b 4096 -C "$EMAIL2" -f ~/.ssh/id_rsa_personal
+    ssh-keygen -t ed25519 -b 4096 -C "$EMAIL2" -f ~/.ssh/id_ed25519_personal
 
     echo "# Default github account" >> ~/.ssh/config
     echo "Host $GIT_STANDARD_SSH_HOST" >> ~/.ssh/config
     echo "   HostName github.com" >> ~/.ssh/config
-    echo "   IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
+    echo "   IdentityFile ~/.ssh/id_ed25519" >> ~/.ssh/config
     echo "   IdentitiesOnly yes" >> ~/.ssh/config
     echo "" >> ~/.ssh/config
     echo "# Personal github account" >> ~/.ssh/config
     echo "Host $GIT_PERSONAL_SSH_HOST" >> ~/.ssh/config
     echo "   HostName github.com" >> ~/.ssh/config
-    echo "   IdentityFile ~/.ssh/id_rsa_personal" >> ~/.ssh/config
+    echo "   IdentityFile ~/.ssh/id_ed25519_personal" >> ~/.ssh/config
     echo "   IdentitiesOnly yes" >> ~/.ssh/config
   fi
 }
@@ -126,14 +126,14 @@ function instruct_ssh_key_to_github {
   GITHUB_SETTINGS_URL="https://github.com/settings/keys"
 
   open_url_in_browser "$GITHUB_SETTINGS_URL"
-  copy_file_to_clipboard "$HOME/.ssh/id_rsa.pub"
+  copy_file_to_clipboard "$HOME/.ssh/id_ed25519.pub"
   read -p "ssh key copied to clipboard, add to github, then hit enter"
 
-  if [ -e ~/.ssh/id_rsa_personal.pub ]; then
+  if [ -e ~/.ssh/id_ed25519_personal.pub ]; then
     echo "Copying personal sshkey..."
     open_url_in_browser "$GITHUB_SETTINGS_URL"
     read -p "Open that url to your personal github account..."
-    copy_file_to_clipboard "$HOME/.ssh/id_rsa_personal.pub"
+    copy_file_to_clipboard "$HOME/.ssh/id_ed25519_personal.pub"
     read -p "personal ssh key copied to clipboard, add to github, then hit enter"
   fi
 }
@@ -329,7 +329,7 @@ function mac_setup {
   echo "DO MAC SETUP"
   echo "------------"
 
-  mac_write_defaults
+  #mac_write_defaults
   mac_install_homebrew
   mac_install_commands_via_brew
   mac_default_to_bash
@@ -389,7 +389,7 @@ function mac_install_commands_via_brew {
     exit 1
   fi
 
-  # This is for cameracontroller to fix webcam issues
+#    cameracontroller \
 
   for cmd in \
     bash-completion \
@@ -398,18 +398,39 @@ function mac_install_commands_via_brew {
     grep \
     rectangle \
     iterm2 \
-    cameracontroller \
     jq \
     qrencode \
     hammerspoon \
     1password-cli \
     gh \
+    notunes \
+    scroll-reverser \
+    cursr \
     wget; do
 
-    brew list $cmd || brew install $cmd
-
+    echo "$cmd"
+    brew list $cmd 1>/dev/null || mac_brew_adopt_if_installed $cmd || brew install $cmd
   done
+
+  read -p "Run and setup scroll-reverser, cursr, and rectangle"
 }
+
+function mac_brew_adopt_if_installed {
+  case "$1" in
+    iterm2)
+      if [ -e "/Applications/iTerm.app" ]; then
+        brew install --cask --adopt $cmd
+      else
+        return 1
+      fi
+      ;;
+
+    *)
+      return 1
+      ;;
+  esac
+}
+
 
 function mac_default_to_bash {
   echo ""
