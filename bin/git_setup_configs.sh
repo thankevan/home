@@ -37,7 +37,13 @@ _git_config_question_and_apply() {
     exit 1
   fi
 
-  if _check_for_yes_no "Turn on $config?" "y"; then
+  local turn_direction="on"
+
+  if [ "$value" = "false" ]; then
+    turn_direction="off"
+  fi
+
+  if _check_for_yes_no "Turn $turn_direction $config?" "y"; then
     git config --global $config $value
   fi
 }
@@ -59,6 +65,10 @@ _git_config_question_and_apply "pull.rebase" true
 # do git pull --rebase --autostash by default
 _git_config_question_and_apply "rebase.autoStash" true
 
+# when rebasing for stacked diffs, don't warn when ignoring matching applied commits
+# from a rebased parent branch in the stack
+_git_config_question_and_apply "advice.skippedCherryPicks" false
+
 
 ## RERERE
 
@@ -75,6 +85,8 @@ _git_config_question_and_apply "push.default" "current"
 # autoset remote branch
 _git_config_question_and_apply "push.autoSetupRemote" true
 
+# always do --force-if-includes when doing --force-with-lease (safer checks)
+_git_config_question_and_apply "push.useForceIfIncludes" true
 
 ## STATUS
 
