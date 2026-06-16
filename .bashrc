@@ -15,9 +15,10 @@ BASHRC_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 # export CODE_ENV=DEV|TEST|PROD  - Manually sets the environment.
 
 ###### .PRECUSTOM SCREEN OPTIONS ######
-# export USESCREEN=1    - Activate screen.
-# export USETMUX=1      - Activate tmux.
-# export SYSSCREENRC=x  - Overrides .screenrc with x.
+# export USESCREEN=1               - Activate screen.
+# export USETMUX=1                 - Activate tmux.
+# export TMUXCONF=.../.tmux.conf   - Use this file instead of default for TMUXCONF file
+# export SYSSCREENRC=x             - Overrides .screenrc with x.
 
 ###### .PRECUSTOM BASHRC OPTIONS ######
 # export QUITNOW=1      - Signifies for bashrc to stop processing.
@@ -262,15 +263,19 @@ if [ "$USER" == 'root' ] && [ "$(logname 2>/dev/null)" != 'root' ]; then
   export USETMUX=0
 fi
 
+if [ -z "$TMUXCONF" ]; then
+  export TMUXCONF="$BASHRC_DIR/.tmux.conf"
+fi
+
 # no tmux if there's no config
-if [ ! -f "$BASHRC_DIR/.tmux.conf" ]; then
+if [ ! -f "$TMUXCONF" ]; then
   export USETMUX=0
 fi
 
 # Reattach to tmux if there is one available or create new session
 if [ "$USETMUX" = 1 ]; then
   tmux_attach_flag=$(tmux ls 2>/dev/null | grep -qv 'attached)$' && echo "attach -d")
-  tmux $tmux_attach_flag
+  tmux -f $TMUXCONF $tmux_attach_flag
 fi
 
 
