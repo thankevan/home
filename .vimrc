@@ -13,6 +13,13 @@ set noswapfile
 " Backspace over autoindent, line breaks, and over the start of insert.
 set backspace=indent,eol,start
 
+" Force Vim to check for window size changes frequently - use CNTL-L to refresh manually
+set ttyfast
+set lazyredraw
+
+" fix encoding
+set encoding=utf-8
+
 """""""""""""""""""""""""""""
 "  FILETYPE CUSTOMIZATIONS  "
 """""""""""""""""""""""""""""
