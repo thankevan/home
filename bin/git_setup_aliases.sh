@@ -52,6 +52,14 @@ git config --global --unset alias.gl
 git config --global alias.gl "config --global -l"
 
 # output global aliases
+git config --global --unset alias.aliases
+#git config --global alias.aliases "!git config --global -l | grep alias"
+git config --global alias.aliases "!git config -l |grep -E '^alias' | cut -c 7- |grep --color=always -E '^[^=]+'"
+
+git config --global --unset alias.aliaslist
+#git config --global alias.aliaslist "!git config --global -l | grep alias"
+git config --global alias.aliaslist "!git config -l |grep -E '^alias' | cut -c 7- |grep --color=always -E '^[^=]+'"
+
 git config --global --unset alias.al
 #git config --global alias.al "!git config --global -l | grep alias"
 git config --global alias.al "!git config -l |grep -E '^alias' | cut -c 7- |grep --color=always -E '^[^=]+'"

@@ -93,6 +93,8 @@ _git_config_question_and_apply "push.useForceIfIncludes" true
 # Show stash count
 _git_config_question_and_apply "status.showStash" true
 
+# Ignore files from blame for big changes like lint fixes
+_git_config_question_and_apply "blame.ignoreRevsFile" ".git-blame-ignore-revs"
 
 ## SUBMODULES
 
