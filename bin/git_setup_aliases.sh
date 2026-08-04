@@ -84,5 +84,5 @@ git config --global alias.dup "!docker compose up"
 
 # diff branch to branching point (diff to origin)
 git config --global --unset alias.do
-git config --global alias.showother "!show_file_from_branch() { git show \$1:\$2; }; show_file_from_branch"
+git config --global alias.do "!git diff \$(git merge-base HEAD origin/main)"
 
